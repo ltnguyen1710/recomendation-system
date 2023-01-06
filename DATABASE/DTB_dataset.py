@@ -21,15 +21,18 @@ class DTB_dataset:
         #-----------------------Connect DTB-----------------------
         self.conn = pyodbc.connect(self.connection_string)
         self.cursor = self.conn.cursor()
+    
 
     def query_table(self,sql):
         """
         Truy vấn Database
         - Input: String
-        - Output: List
+        - Output: DataFrame
         """
         self.cursor.execute(sql)
-        return self.cursor.fetchall()
+        df = pd.DataFrame.from_records(self.cursor.fetchall(),
+                               columns = [desc[0] for desc in self.cursor.description])
+        return df
 
     def create_table(self,table_name,list_col):
         """
@@ -94,17 +97,16 @@ class DTB_dataset:
             sqlstate = ex.args[1]
             print(sqlstate)
             return False
-
+    def test(self):
+        table_names = [x[2] for x in self.cursor.tables(tableType='TABLE')]
+        return table_names
+        
 
 # ------------------------Example------------------------
 # maindata = DTB_dataset()
 # sql="select * from example"
-# data=maindata.query_table(sql)
-# print(data)
-# df = pd.DataFrame(data)
-# print(df)
+# df_test = maindata.query_table(sql)
+# print(df_test)
+# print(maindata.test())
 
-# table_name = "exp_create"
-# col_name = ["mot","hai","ba"]
-# bool_create = maindata.create_table(table_name,col_name)
-# print(bool_create)
+
