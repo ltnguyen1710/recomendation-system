@@ -1,9 +1,6 @@
 import tkinter as tk
 import pandas as pd
-from tkinter import filedialog, Label, Button, Entry, StringVar
-from tkinter.filedialog import askopenfile
-from tkinter.messagebox import showinfo
-from time import strftime
+from tkinter import StringVar
 
 
 class predictApp(tk.Frame):
