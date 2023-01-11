@@ -14,8 +14,6 @@ class Data_Normalization(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text="Data Normalization", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
         self.initUI()
     
     def initUI(self):
@@ -55,8 +53,8 @@ class Data_Normalization(tk.Frame):
         self.button_back.place(x = 50, y = 700)
         
     def panel_Top(self):
-        self.top = tk.Label(self,text="Detail Dataset")
-        self.top.place(x = 900, y = 10)
+        self.label = tk.Label(self, text="Data Normalization", font=self.controller.title_font)
+        self.label.place( x = int(self.winfo_screenwidth()/2.2),y = 10)
     
     def panel_Bottom(self):
         # hiện thị ô text
