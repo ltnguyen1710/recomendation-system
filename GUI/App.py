@@ -6,7 +6,9 @@ except ImportError:
     import tkFont as tkfont  # python 2
 import Predict_Movie as PM
 import Data_Normalization as DN
-import Index as IN
+import index as IN
+# from index import Index as IN
+
 '''
 chạy class này đầu tiên!!
 nó như controller điều khiển và chuyển đổi các page của app.

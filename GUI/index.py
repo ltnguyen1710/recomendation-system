@@ -1,8 +1,12 @@
 import tkinter as tk 
+import glob
+
+
 '''
 class này hiển thị các phần button của trang index của hệ thống
 
 '''
+
 class Index(tk.Frame):
     
     def __init__(self, parent, controller):
@@ -10,7 +14,9 @@ class Index(tk.Frame):
         self.controller = controller
        
         # hiển thị nền cho page.
-        self.bg = tk.PhotoImage(file = "D:/Github/recommendation-system/img/BG.png")
+        path=glob.glob('img/BG.png')
+        self.bg = tk.PhotoImage(file = path)
+
         self.my_Label = tk.Label(self, image= self.bg)
         self.my_Label.place(relwidth= 1, relheight= 1)
        

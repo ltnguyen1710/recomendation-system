@@ -97,8 +97,11 @@ class DTB_dataset:
             sqlstate = ex.args[1]
             print(sqlstate)
             return False
-    def test(self):
+    def get_list_Table(self):
         table_names = [x[2] for x in self.cursor.tables(tableType='TABLE')]
+        # Trong list table_names dư 2 Table của hệ thống nên xóa
+        del table_names[-1]
+        del table_names[-1]
         return table_names
         
 
@@ -107,6 +110,6 @@ class DTB_dataset:
 # sql="select * from example"
 # df_test = maindata.query_table(sql)
 # print(df_test)
-# print(maindata.test())
+# print(maindata.get_list_Table())
 
 

@@ -11,13 +11,10 @@ class CONTROL_import:
         self.dtb = DTB_dataset()
         pass
 
-    def import_file(self,path,filenames):     
-        # Import CSV
-        data = pd.read_csv (path)   
-        df = pd.DataFrame(data)
+    def add_data(self,tb_name,df):     
         # Khởi tạo bảng
-        table_name = Path(filenames[0]).stem
-        list_col = list(data.columns)
+        table_name = tb_name
+        list_col = list(df.columns)
         state_create_table = self.dtb.create_table(table_name,list_col)
         
         if(state_create_table==True):    
@@ -29,7 +26,7 @@ class CONTROL_import:
                 self.alert = "ERROR: \n"+state_update_table
         else:
             self.alert = "ERROR: \n"+state_create_table
-
+        
     def show_alert(self):
         return self.alert
         

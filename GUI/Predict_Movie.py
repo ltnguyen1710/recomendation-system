@@ -5,14 +5,21 @@ from tkinter.filedialog import askopenfile
 from tkinter.messagebox import showinfo
 from time import strftime
 import App as APP
+import glob
+# ------------------------Import Package CONTROL------------------------
+import sys
+sys.path.insert(0, 'CONTROL')
+from CONTROL_getInfo import CONTROL_getInfo
 
 class Predicit_Movie(tk.Frame):
     
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
+        self.CONTROL_getInfo = CONTROL_getInfo()
         # set bg cho page predict
-        self.bg = tk.PhotoImage(file = "D:/Github/recommendation-system/img/BG predict.png")
+        path=glob.glob('img/BG_predict.png')
+        self.bg = tk.PhotoImage(file = path)
         self.my_Label = tk.Label(self, image= self.bg)
         self.my_Label.place(relwidth= 1, relheight= 1)
         
@@ -30,7 +37,7 @@ class Predicit_Movie(tk.Frame):
         # set list chọn dataset
         self.list_Database = tk.StringVar()
         self.list_Database.set("Select database")
-        self.option_Database = ['X','Y','C','Z']
+        self.option_Database = self.CONTROL_getInfo.get_list_Table()
         self.option_Menu_Database = tk.OptionMenu(self, self.list_Database,*self.option_Database, command=self.select_Database)
          
         #button go back đã được setup
@@ -68,15 +75,18 @@ class Predicit_Movie(tk.Frame):
         self.bottom_Display_Perdict.place(x = int(self.winfo_screenwidth()/4), y = int(self.winfo_screenheight()/5))
         
     # sự kiện cho list chọn database
-    def select_Database(self):
+    def select_Database(self,selection):
+        print(selection)
         return 0
     
     #sự kiện cho list chọn user
-    def select_User(self):
-        return 0    
+    def select_User(self,selection):
+        print(selection)
+        return 0  
     
     #sự kiện cho list chọn film
-    def select_Film(self):
+    def select_Film(self,selection):
+        print(selection)
         return 0
     
     #sự kiện cho button dự đoán.    
