@@ -73,12 +73,12 @@ class Data_Normalization(tk.Frame):
 
         # Frame Table
         self.bottom = tk.Frame(self,background='#DCDCDC')
-        self.bottom.place(x=250, y=40, width=self.winfo_screenwidth() *
+        self.bottom.place(x=self.winfo_screenwidth()*0.18, y=self.winfo_screenheight()*0.05, width=self.winfo_screenwidth() *
                           0.8, height=self.winfo_screenheight()*0.82)
         # Frame Button option
         self.bottom_button_function = tk.Frame(self,background='#DCDCDC')
         self.bottom_button_function.place(
-            x=250, y=self.winfo_screenheight()-80, width=self.winfo_screenwidth()*0.8, height=self.winfo_screenheight()*0.05)
+            x=self.winfo_screenwidth()*0.18, y=self.winfo_screenheight()*0.9, width=self.winfo_screenwidth()*0.8, height=self.winfo_screenheight()*0.05)
         # Button Add data into Database
         button_add_data = tk.Button(self.bottom_button_function, text="Add data", height=10, width=20,
                                     command=lambda: self.GUI_Import.open_import(self.get_currentTable()))
