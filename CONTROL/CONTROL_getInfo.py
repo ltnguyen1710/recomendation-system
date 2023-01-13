@@ -6,6 +6,9 @@ import sys
 sys.path.insert(0, 'DATABASE')
 from DTB_dataset import DTB_dataset
 
+"""
+Class này dùng để Lấy dữ liệu để dự đoán (Predict Movie)
+"""
 class CONTROL_getInfo:
     def __init__(self):
         self.dtb = DTB_dataset()

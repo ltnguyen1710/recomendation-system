@@ -1,13 +1,16 @@
 import tkinter as tk
-import pandas as pd
-from tkinter import filedialog, Label, Button, Entry, StringVar
-from tkinter.filedialog import askopenfile
-from tkinter.messagebox import showinfo
+
 from pandastable import Table
+from tkinter.messagebox import showinfo
 
 # ------------------------Import Package GUI------------------------
 import GUI_import as guiImport
 import App as APP
+# ------------------------Import Package CONTROL------------------------
+import sys
+sys.path.insert(0, 'CONTROL')
+from CONTROL_ML_Normalization import CONTROL_ML_Normalization
+from CONTROL_Statistical_Normalization import CONTROL_Statistical_Normalization
 
 class Data_Normalization(tk.Frame):
 
@@ -15,6 +18,8 @@ class Data_Normalization(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         self.GUI_Import = guiImport.GUI_import(self)
+        self.CONTROL_ML = CONTROL_ML_Normalization()
+        self.CONTROL_Sta = CONTROL_Statistical_Normalization()
         self.initUI()
 
     def initUI(self):
@@ -40,20 +45,22 @@ class Data_Normalization(tk.Frame):
         self.button_back = tk.Button(self, text="Go back to index",
                                      command=lambda: APP.SampleApp.show_frame(self.controller, 'Index'))
         # chọn định chuẩn dữ liệu
-        self.menu = tk.StringVar()
-        self.menu.set("Select methods")
+        self.list_methods = tk.StringVar()
+        self.list_methods.set("Select methods")
         self.drop = tk.OptionMenu(
-            self, self.menu, "Machine learning", "Statistical")
+            self, self.list_methods, "Machine learning", "Statistical")
 
         # chọn vị trí của các button, label và text
         self.t1 = tk.Text(self, width=20, height=4)
         self.left.place(x=10, y=10)
         self.button.place(x=10, y=30)
         self.t1.place(x=10, y=60)
-        self.normalization.place(x=10, y=150)
-        self.drop.place(x=10, y=190)
+        self.drop.place(x=10, y=150)
+        self.normalization.place(x=10, y=190)
         self.runSystem.place(x=160, y=700)
         self.button_back.place(x=50, y=700)
+
+
 
     def panel_Top(self):
         self.label = tk.Label(self, text="Data Normalization",
@@ -110,10 +117,21 @@ class Data_Normalization(tk.Frame):
         - Output: None
         """
         self.table.redraw()
-    # sự kiện của button chuẩn hóa dữ liệu
+    
+    # sự kiện cho list chọn database
     def data_Normalization(self):
-        return 0
-
+        df = self.get_currentTable()
+        select_methods = self.list_methods.get()
+        if(select_methods=="Machine learning"):
+            self.CONTROL_ML.Test(df)
+            self.alert_Normalization()
+        elif(select_methods=="Statistical"):
+            self.CONTROL_Sta.Test()
+    
     # sự kiện của button chạy hệ thống
     def run_Recommendation_System(self):
         return 0
+
+    def alert_Normalization(self):
+        showinfo('Alert', self.CONTROL_ML.alert())
+        self.refresh_table()
