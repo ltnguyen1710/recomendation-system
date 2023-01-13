@@ -42,7 +42,7 @@ class Predicit_Movie(tk.Frame):
          
         #button go back đã được setup
         self.button_Go_Back = tk.Button(self, text="Go back to index",
-                           command=lambda: APP.SampleApp.show_frame(self.controller,"Index"))
+                           command=lambda: APP.SampleApp.show_frame(self.controller,"GUI_index"))
         
         # set list chọn user
         self.list_Users = tk.StringVar()

@@ -4,10 +4,9 @@ try:
 except ImportError:
     import Tkinter as tk     # python 2
     import tkFont as tkfont  # python 2
-import Predict_Movie as PM
-import Data_Normalization as DN
-import index as IN
-# from index import Index as IN
+import GUI_Predict_Movie as PM
+import GUI_Data_Normalization as DN
+import GUI_index as IN
 
 '''
 chạy class này đầu tiên!!
@@ -26,14 +25,14 @@ class SampleApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (IN.Index, DN.Data_Normalization, PM.Predicit_Movie):
+        for F in (IN.GUI_index, DN.Data_Normalization, PM.Predicit_Movie):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
 
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.show_frame("Index")
+        self.show_frame("GUI_index")
 
     def show_frame(self, page_name):
         '''Show a frame for the given page name'''
@@ -43,7 +42,5 @@ class SampleApp(tk.Tk):
 if __name__ == "__main__":
     app = SampleApp()
     app.title("Recommendation System Application")
-    width_value = app.winfo_screenwidth()
-    height_value = app.winfo_screenheight()
-    app.geometry("%dx%d+0+0" % (width_value,height_value))
+    app.state('zoomed')
     app.mainloop()

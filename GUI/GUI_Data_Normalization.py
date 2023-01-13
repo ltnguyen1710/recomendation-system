@@ -43,7 +43,7 @@ class Data_Normalization(tk.Frame):
 
         # button quay về page index
         self.button_back = tk.Button(self, text="Go back to index",
-                                     command=lambda: APP.SampleApp.show_frame(self.controller, 'Index'))
+                                     command=lambda: APP.SampleApp.show_frame(self.controller, 'GUI_index'))
         # chọn định chuẩn dữ liệu
         self.list_methods = tk.StringVar()
         self.list_methods.set("Select methods")
@@ -87,7 +87,7 @@ class Data_Normalization(tk.Frame):
         refresh_table = tk.Button(self.bottom_button_function, text="Refresh table", height=10, width=20,
                                   command=self.refresh_table)
         refresh_table.pack(side='left', expand='YES')                          
-        # Button None
+        # Button None --- Chưa biết làm gì để dô cho có 
         btt = tk.Button(self.bottom_button_function,
                         text="Button 3", height=10, width=20)
         btt.pack(side='left', expand='YES')

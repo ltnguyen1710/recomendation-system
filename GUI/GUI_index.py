@@ -7,7 +7,7 @@ class này hiển thị các phần button của trang index của hệ thống
 
 '''
 
-class Index(tk.Frame):
+class GUI_index(tk.Frame):
     
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
