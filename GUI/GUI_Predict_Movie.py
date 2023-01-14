@@ -9,9 +9,8 @@ import glob
 # ------------------------Import Package CONTROL------------------------
 import sys
 sys.path.insert(0, 'CONTROL')
-from CONTROL_getInfo import CONTROL_getInfo
 from CONTROL_normalization import CONTROL_normalization
-
+from CONTROL_getInfo import CONTROL_getInfo
 class Predicit_Movie(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -91,48 +90,38 @@ class Predicit_Movie(tk.Frame):
         self.chosen_dataset = self.CONTROL_getInfo.query_table(sql)
         self.CONTROL_normalization.train(self.chosen_dataset.copy())
         # set list user
-        self.option_Users = self.CONTROL_getInfo.get_user_info(
-            self.chosen_dataset.copy()).user_id.values
-        self.option_Menu_Users['menu'].delete(0, 'end')
+        self.option_Users = self.CONTROL_getInfo.get_user_info(self.chosen_dataset.copy()).user_id.values
+        self.option_Menu_Users['menu'].delete(0,'end')
         for choice in self.option_Users:
-            self.option_Menu_Users['menu'].add_command(
-                label=choice, command=tk._setit(self.list_Users, choice))
-        self.list_Users.trace('w', self.select_User)
+            self.option_Menu_Users['menu'].add_command(label=choice, command=tk._setit(self.list_Users, choice))
+        self.list_Users.trace('w',self.select_User)
         # set list film
-        self.option_Film = self.CONTROL_getInfo.get_movie_info(
-            self.chosen_dataset.copy()).movie_id.values
-        self.option_Menu_Film['menu'].delete(0, 'end')
+        self.option_Film = self.CONTROL_getInfo.get_movie_info(self.chosen_dataset.copy()).movie_id.values
+        self.option_Menu_Film['menu'].delete(0,'end')
         for choice in self.option_Film:
-            self.option_Menu_Film['menu'].add_command(
-                label=choice, command=tk._setit(self.list_Films, choice))
-        self.list_Films.trace('w', self.select_Film)
+            self.option_Menu_Film['menu'].add_command(label=choice, command=tk._setit(self.list_Films, choice))
+        self.list_Films.trace('w',self.select_Film)
         return 0
 
     # sự kiện cho list chọn user
-    def select_User(self):
+    def select_User(self, *args):
         print(self.list_Users.get())
-        self.chosen_user = self.CONTROL_getInfo.get_user_info_by_id(
-            self.list_Users.get())
+        self.chosen_user = self.CONTROL_getInfo.get_user_info_by_id(self.list_Users.get())
         return 0
 
     # sự kiện cho list chọn film
-    def select_Film(self):
+    def select_Film(self, *args):
         print(self.list_Films.get())
-        self.chosen_movie = self.CONTROL_getInfo.get_movie_info_by_id(
-            self.list_Films.get())
+        self.chosen_movie= self.CONTROL_getInfo.get_movie_info_by_id(self.list_Films.get())
         return 0
 
     # sự kiện cho button dự đoán.
     def perdict_System(self):
-        user_vs_movie = self.CONTROL_normalization.merge_user_vs_movie(
-            self.chosen_user.copy(), self.chosen_movie.copy())
+        user_vs_movie = self.CONTROL_normalization.merge_user_vs_movie(self.chosen_user.copy(),self.chosen_movie.copy())
         print(user_vs_movie)
-        prepare_data_for_predict = self.CONTROL_normalization.prepare_for_predict(
-            user_vs_movie, self.chosen_dataset.copy())
-        result = self.CONTROL_normalization.myfm.predict(
-            prepare_data_for_predict)
+        prepare_data_for_predict = self.CONTROL_normalization.prepare_for_predict(user_vs_movie,self.chosen_dataset.copy())
+        result = self.CONTROL_normalization.myfm.predict(prepare_data_for_predict)
         print(result)
-        self.bottom_Display_Perdict.delete(1.0, 'end-1c')
-        self.bottom_Display_Perdict.insert(
-            "end-1c", "Predict rating : "+str(result[0]))
+        self.bottom_Display_Perdict.delete(1.0,'end-1c')
+        self.bottom_Display_Perdict.insert("end-1c", "Predict result: "+str(result[0]))
         return 0
