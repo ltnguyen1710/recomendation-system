@@ -5,7 +5,7 @@ class DTB_dataset:
     def __init__(self):
         #-----------------------Setup DTB-----------------------
         self.DRIVER_NAME = 'ODBC Driver 17 for SQL Server'
-        self.SERVER_NAME = 'HOLAKAKA-PC'  # SELECT @@SERVERNAME
+        self.SERVER_NAME = 'UTECH\SQLEXPRESS'  # SELECT @@SERVERNAME
         self.DATABASE_NAME = 'datasource'
         self.DATABASE_UID = 'nckh'
         self.DATABASE_PWD = '123456'
@@ -107,7 +107,7 @@ class DTB_dataset:
 
 # ------------------------Example------------------------
 # maindata = DTB_dataset()
-# sql="select * from example"
+# sql="select * from newResult"
 # df_test = maindata.query_table(sql)
 # print(df_test)
 # print(maindata.get_list_Table())

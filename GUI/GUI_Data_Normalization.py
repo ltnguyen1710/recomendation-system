@@ -123,7 +123,8 @@ class Data_Normalization(tk.Frame):
         df = self.get_currentTable()
         select_methods = self.list_methods.get()
         if(select_methods=="Machine learning"):
-            self.CONTROL_ML.Test(df)
+            self.set_table(self.CONTROL_ML.Test(df).fillna(value=''))
+            # self.set_table(self.CONTROL_ML.Test(df))
             self.alert_Normalization()
         elif(select_methods=="Statistical"):
             self.CONTROL_Sta.Test()
