@@ -17,7 +17,7 @@ class CONTROL_normalization:
         self.bestfeature_movie = []
         self.myfm = myfm.MyFMGibbsRegressor(rank=10, random_seed=42,)
 
-    def normalize_data(self, data_normalized: pd.DataFrame):
+    def prepare(self, data_normalized: pd.DataFrame):
         if 'movie_release_date' in data_normalized.columns:
             data_normalized['movie_release_date'] = pd.to_datetime(
                 data_normalized.movie_release_date)
@@ -30,7 +30,7 @@ class CONTROL_normalization:
         return data_normalized.copy()
 
     def train(self, data_normalized: pd.DataFrame):
-        data_normalized = self.normalize_data(data_normalized)
+        data_normalized = self.prepare(data_normalized)
         FEATURE_COLUMNS = ['user_id', 'movie_id']
         ohe = OneHotEncoder(handle_unknown='ignore')
         df_train = data_normalized[:int(len(data_normalized.values)*0.8)]
@@ -99,8 +99,8 @@ class CONTROL_normalization:
                       group_shapes=group_shapes_extended)
 
     def prepare_for_predict(self, user_vs_movie: pd.DataFrame, data_normalized: pd.DataFrame):
-        user_vs_movie = self.normalize_data(user_vs_movie)
-        data_normalized = self.normalize_data(data_normalized)
+        user_vs_movie = self.prepare(user_vs_movie)
+        data_normalized = self.prepare(data_normalized)
         FEATURE_COLUMNS = ['user_id', 'movie_id']
         ohe = OneHotEncoder(handle_unknown='ignore')
         df_train = data_normalized[:int(len(data_normalized.values)*0.8)]
@@ -156,7 +156,7 @@ class CONTROL_normalization:
             df_train: pd.DataFrame,
             df_test: pd.DataFrame):
 
-        full_dataset = self.normalize_data(full_dataset)
+        full_dataset = self.prepare(full_dataset)
 
         FEATURE_COLUMNS = ['user_id', 'movie_id']
 
@@ -254,7 +254,7 @@ class CONTROL_normalization:
             df_train: pd.DataFrame,
             df_test: pd.DataFrame,
             full_feature_rmse=float('inf')):
-        full_dataset = self.normalize_data(full_dataset)
+        full_dataset = self.prepare(full_dataset)
         ohe = OneHotEncoder(handle_unknown='ignore')
         FEATURE_COLUMNS = ['user_id', 'movie_id']
         X_train = ohe.fit_transform(df_train[FEATURE_COLUMNS])

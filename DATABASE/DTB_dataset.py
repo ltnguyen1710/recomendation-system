@@ -48,7 +48,7 @@ class DTB_dataset:
                 else:
                     create_value += ', '
 
-                type_col = col + ' varchar(1000)'
+                type_col = col + ' varchar(5000)'
                 create_value += type_col
                 
             

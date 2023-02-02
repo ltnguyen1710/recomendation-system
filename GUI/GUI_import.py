@@ -49,7 +49,7 @@ class GUI_import:
             initialdir='/',
             filetypes=filetypes)
         path = ''.join(filenames)  # Convert Filenames to Str
-        df = pd.read_csv(path)
+        df = pd.read_csv(path).astype('str').fillna(value='')
         return df
 
     def close_import(self):

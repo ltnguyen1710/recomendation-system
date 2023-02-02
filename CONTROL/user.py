@@ -66,9 +66,9 @@ class user:
 # # print(user_vs_movie.columns)
 # user_vs_movie = normalize.merge_user_vs_movie(user_info,movie_info)
 # print(user_vs_movie)
-# X_test = normalize.prepare_for_predict(user_vs_movie,result)
-# print(X_test)
-# print(normalize.myfm.predict(X_test))
+# # X_test = normalize.prepare_for_predict(user_vs_movie,result)
+# # print(X_test)
+# # print(normalize.myfm.predict(X_test))
 
 
 # user_vs_movie['movie_release_year'] = [
@@ -121,4 +121,3 @@ class user:
 #     [len(group) for group in current_movie_Data_ohe.categories_]
 # )
 # print(group_shapes_extended)
-
