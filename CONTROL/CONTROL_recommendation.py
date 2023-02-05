@@ -20,6 +20,8 @@ class CONTROL_recommendation:
 
     # sort value of array
     def sort_array(self, array):
+        if array == 'nan' or array == 'NaN' or pd.isna(array):
+            return 'NaN'
         new_array = [i['name'] for i in eval(array)]
         new_array.sort()
         return new_array
@@ -82,15 +84,19 @@ class CONTROL_recommendation:
                         str(x) for x in data[i].dt.year.fillna('NaN')]
                     continue
                 if pd.api.types.is_numeric_dtype(data[i].dtypes) and 'rating' not in i:
+                    data[i] = data[i].fillna(0)
                     data[i] = data[i] // 5 * 5
                     continue
                 if self.check_value_is_dict(data, i):
+                    data[i] = data[i].fillna('NaN')
                     data[i] = data[i].apply(lambda x: 'NaN' if (
-                        pd.isna(x)) else eval(str(x))['name'])
+                        x=='nan' or x=='NaN') else eval(str(x))['name'])
                     continue
                 if self.check_value_is_list(data, i):
+                    data[i] = data[i].fillna('NaN')
                     data[i] = data[i].apply(lambda x: self.sort_array(x))
-                    data[i] = data[i].apply(lambda x: '|'.join(
+                    data[i] = data[i].apply(lambda x: 'NaN' if (
+                        x=='nan' or x=='NaN') else '|'.join(
                         [i.replace(" ", "") for i in x]))
                     continue
         return data.copy()

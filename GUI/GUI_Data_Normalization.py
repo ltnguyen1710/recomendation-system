@@ -5,6 +5,7 @@ from tkinter.messagebox import showinfo
 
 # ------------------------Import Package GUI------------------------
 import GUI_import as guiImport
+import GUI_Result
 import App as APP
 # ------------------------Import Package CONTROL------------------------
 import sys
@@ -121,13 +122,23 @@ class Data_Normalization(tk.Frame):
     # sự kiện cho list chọn database
     def data_Normalization(self):
         df = self.get_currentTable()
+        print(df.dtypes)
         select_methods = self.list_methods.get()
         if(select_methods=="Machine learning"):
             self.set_table(self.CONTROL_ML.Test(df).fillna(value=''))
             # self.set_table(self.CONTROL_ML.Test(df))
             self.alert_Normalization()
         elif(select_methods=="Statistical"):
-            self.CONTROL_Sta.Test()
+            # self.CONTROL_Sta.Test()
+            df_prepare = self.CONTROL_Sta.prepare(df)
+            print(df_prepare.dtypes)
+            df_label = self.CONTROL_Sta.label_for_non_date_dtype(df_prepare)
+            df_label = self.CONTROL_Sta.label_for_date_dtype(df_label)
+            self.CONTROL_Sta.calculate_correof(df_prepare)
+            print(self.CONTROL_Sta.corrcoef)
+            self.GUI_Result = GUI_Result.GUI_Result(self)
+            self.GUI_Result.df_result = self.CONTROL_Sta.corrcoef.copy()
+            self.GUI_Result.open_import()
     
     # sự kiện của button chạy hệ thống
     def run_Recommendation_System(self):
