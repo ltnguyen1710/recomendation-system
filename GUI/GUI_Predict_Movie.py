@@ -153,6 +153,7 @@ class Predicit_Movie(tk.Frame):
 
     # sự kiện cho button dự đoán.
     def perdict_System(self):
+        self.chosen_dataset[['user_id','movie_id']] = self.chosen_dataset[['user_id','movie_id']].apply(lambda x: x-1)
         rs = CF(self.chosen_dataset, k=20, uuCF = self.method, bert=1)
         rs.fit()
         full_rating = rs.full_Y()
