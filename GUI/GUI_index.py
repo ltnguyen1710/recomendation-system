@@ -35,3 +35,4 @@ class GUI_index(tk.Frame):
         self.button_Data.place(x = int(self.winfo_screenwidth())/1.3, y = int(self.winfo_screenheight())/8)
         self.button_Predict.place(x = int(self.winfo_screenwidth())/1.3, y = int(self.winfo_screenheight())/5)
         
+    

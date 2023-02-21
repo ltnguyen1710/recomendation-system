@@ -6,6 +6,8 @@ import pandas as pd
 from tkinter import filedialog as fd
 from tkinter.messagebox import askyesno
 import time
+import GUI_Predict_Movie as PM
+
 
 
 # ------------------------Import Package CONTROL------------------------

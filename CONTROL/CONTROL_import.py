@@ -28,6 +28,7 @@ class CONTROL_import:
             state_update_table = self.dtb.update_table(table_name,df)
             if(state_update_table==True):
                 self.alert = "Your file has been imported successfully!!!"
+                
             else:
                 self.alert = "ERROR: \n"+ "something went wrong"
         else:

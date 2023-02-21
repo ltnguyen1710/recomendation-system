@@ -13,6 +13,7 @@ sys.path.insert(0, 'CONTROL')
 from CONTROL_getInfo import CONTROL_getInfo
 from CF import CF
 
+
 class Predicit_Movie(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -24,13 +25,13 @@ class Predicit_Movie(tk.Frame):
         self.bg = tk.PhotoImage(file=path)
         self.my_Label = tk.Label(self, image=self.bg)
         self.my_Label.place(relwidth=1, relheight=1)
-
         self.initUI()
 
     def initUI(self):
 
         self.panel_Left()
         # self.panel_Right()
+
 
     def panel_Left(self):
         # Frame Table

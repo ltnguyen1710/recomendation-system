@@ -1,38 +1,44 @@
-# Import the tkinter module
-import tkinter
+import tkinter as tk
 
-# Create the default window
-root = tkinter.Tk()
-root.title("Welcome to GeeksForGeeks")
-root.geometry('700x500')
+class App():
+    def __init__(self, parent):
+        self.parent = parent
+        self.options = ['one', 'two', 'three']
 
-# Create the list of options
-options_list = ["Option 1", "Option 2", "Option 3", "Option 4"]
+        self.om_variable = tk.StringVar(self.parent)
+        self.om_variable.set(self.options[0])
+        self.om_variable.trace('w', self.option_select)
 
-# Variable to keep track of the option
-# selected in OptionMenu
-value_inside = tkinter.StringVar(root)
+        self.om = tk.OptionMenu(self.parent, self.om_variable, *self.options)
+        self.om.grid(column=0, row=0)
 
-# Set the default value of the variable
-value_inside.set("Select an Option")
+        self.label = tk.Label(self.parent, text='Enter new option')
+        self.entry = tk.Entry(self.parent)
+        self.button = tk.Button(self.parent, text='Add option to list', command=self.add_option)
 
-# Create the optionmenu widget and passing
-# the options_list and value_inside to it.
-question_menu = tkinter.OptionMenu(root, value_inside, *options_list)
-question_menu.pack()
+        self.label.grid(column=1, row=0)
+        self.entry.grid(column=1, row=1)
+        self.button.grid(column=1, row=2)
 
-# Function to print the submitted option-- testing purpose
+        self.update_button = tk.Button(self.parent, text='Update option menu', command=self.update_option_menu)
+        self.update_button.grid(column=0, row=2)
+
+    def update_option_menu(self):
+        menu = self.om["menu"]
+        menu.delete(0, "end")
+        for string in self.options:
+            menu.add_command(label=string, 
+                             command=lambda value=string: self.om_variable.set(value))
+
+    def add_option(self):
+         self.options.append(self.entry.get())
+         self.entry.delete(0, 'end')
+         print (self.options)
+
+    def option_select(self, *args):
+        print (self.om_variable.get())
 
 
-def print_answers():
-	print("Selected Option: {}".format(value_inside.get()))
-	return None
-
-
-# Submit button
-# Whenever we click the submit button, our submitted
-# option is printed ---Testing purpose
-submit_button = tkinter.Button(root, text='Submit', command=print_answers)
-submit_button.pack()
-
+root = tk.Tk()
+App(root)
 root.mainloop()
