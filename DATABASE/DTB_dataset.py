@@ -5,7 +5,7 @@ class DTB_dataset:
     def __init__(self):
         #-----------------------Setup DTB-----------------------
         self.DRIVER_NAME = 'ODBC Driver 17 for SQL Server'
-        self.SERVER_NAME = 'HOLAKAKA-PC'  # SELECT @@SERVERNAME
+        self.SERVER_NAME = 'UTECH\SQLEXPRESS'  # SELECT @@SERVERNAME
         self.DATABASE_NAME = 'datasource'
         self.DATABASE_UID = 'nckh'
         self.DATABASE_PWD = '123456'

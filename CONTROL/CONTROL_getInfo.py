@@ -91,7 +91,7 @@ def prepare(data: pd.DataFrame):
         if 'date' in i:
             data[i] = pd.to_datetime(data[i])
             data[i] = [
-                str(x) for x in data[i].dt.year.fillna('NaN')]
+                int(x) for x in data[i].dt.year.fillna(0)]
             continue
         if pd.api.types.is_numeric_dtype(data[i].dtypes):
             data[i] = data[i].fillna(0)
@@ -121,7 +121,8 @@ class CONTROL_getInfo:
         
 
     def get_list_Table(self):
-        return self.dtb.get_list_Table()
+        list_table = self.dtb.get_list_Table()
+        return ['No table exist'] if list_table == [] else list_table
 
     def query_table(self,sql):
 

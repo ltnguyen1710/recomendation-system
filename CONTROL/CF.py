@@ -422,9 +422,11 @@ class CF(object):
     def full_Y(self):
         x, y = np.where(self.rating_array == 0)
         rating_list = self.rating_array.tolist()
-
         for i in range(x.shape[0]):
-            # print(i)
-            rating_list[x[i]][y[i]] = self.pred(y[i], x[i],0)
+            # print(y[i])
+            if self.uuCF:
+                rating_list[x[i]][y[i]] = self.pred(y[i], x[i], 0)
+            else:
+                rating_list[x[i]][y[i]] = self.pred(x[i], y[i], 0)
         self.rating_array = np.array(rating_list).astype(np.float32)
         return pd.DataFrame(self.rating_array)
