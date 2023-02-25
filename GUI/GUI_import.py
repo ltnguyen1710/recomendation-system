@@ -52,6 +52,7 @@ class GUI_import:
             filetypes=filetypes)
         path = ''.join(filenames)  # Convert Filenames to Str
         df = pd.read_csv(path)
+        
         return df
 
     def close_import(self):
@@ -66,50 +67,53 @@ class GUI_import:
         """
         Kiểm soát cửa sổ bật lên là DUY NHẤT với biến self.single_import
         """
-        self.single_import
-        if self.single_import is None:
-            self.single_import = Toplevel(self.root)
-            self.window_height = 250
-            self.window_width = 250
-            self.single_import.title("Add data")
-
-            # ----------- Mở cửa sổ chính giữa màn hình-----------
-
-            self.screen_width = self.root.winfo_screenwidth()
-            self.screen_height = self.root.winfo_screenheight()
-            # Coordinates of the upper left corner of the window to make the window appear in the center
-            x_cordinate = int((self.screen_width/2) - (self.window_width/2))
-            y_cordinate = int((self.screen_height/2) - (self.window_height/2))
-            
-            self.single_import.geometry("{}x{}+{}+{}".format(self.window_width,
-                                                             self.window_height, x_cordinate, y_cordinate))
-            # ----------- Mở cửa sổ chính giữa màn hình-----------
-
-            self.data_to_addinto_DTB = df
-
-            # Button_add__data
-            self.confirm_button = ttk.Button(
-                self.single_import,
-                text='Add data',
-                command=lambda: self.confirm()
-            )
-
-            label_table_name = ttk.Label(
-                self.single_import, text="Input table name: ")
-            label_table_name.grid(column=0, row=0, sticky='w', padx=5, pady=5)
-
-            self.input_name_table = Text(
-                self.single_import, height=2, width=25)
-            self.input_name_table.grid(
-                column=0, row=1, sticky='w', padx=5, pady=5)
-
-            self.confirm_button.grid(column=0, row=2, sticky='w', padx=85, pady=10)
-        
-            self.root.bind("<<PhishDoneEvent>>", self.report_done)
-            # assign to closing button [X]
-            self.single_import.protocol("WM_DELETE_WINDOW", self.close_import)
+        if df.empty:
+            print('DataFrame is empty!')
         else:
-            print("Add new already exists")
+            self.single_import
+            if self.single_import is None:
+                self.single_import = Toplevel(self.root)
+                self.window_height = 250
+                self.window_width = 250
+                self.single_import.title("Add data")
+
+                # ----------- Mở cửa sổ chính giữa màn hình-----------
+
+                self.screen_width = self.root.winfo_screenwidth()
+                self.screen_height = self.root.winfo_screenheight()
+                # Coordinates of the upper left corner of the window to make the window appear in the center
+                x_cordinate = int((self.screen_width/2) - (self.window_width/2))
+                y_cordinate = int((self.screen_height/2) - (self.window_height/2))
+                
+                self.single_import.geometry("{}x{}+{}+{}".format(self.window_width,
+                                                                self.window_height, x_cordinate, y_cordinate))
+                # ----------- Mở cửa sổ chính giữa màn hình-----------
+
+                self.data_to_addinto_DTB = df
+
+                # Button_add__data
+                self.confirm_button = ttk.Button(
+                    self.single_import,
+                    text='Add data',
+                    command=lambda: self.confirm()
+                )
+
+                label_table_name = ttk.Label(
+                    self.single_import, text="Input table name: ")
+                label_table_name.grid(column=0, row=0, sticky='w', padx=5, pady=5)
+
+                self.input_name_table = Text(
+                    self.single_import, height=2, width=25)
+                self.input_name_table.grid(
+                    column=0, row=1, sticky='w', padx=5, pady=5)
+
+                self.confirm_button.grid(column=0, row=2, sticky='w', padx=85, pady=10)
+            
+                self.root.bind("<<PhishDoneEvent>>", self.report_done)
+                # assign to closing button [X]
+                self.single_import.protocol("WM_DELETE_WINDOW", self.close_import)
+            else:
+                print("Add new already exists")
     
     def confirm(self):
         """
