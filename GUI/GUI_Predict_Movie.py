@@ -131,26 +131,28 @@ class Predicit_Movie(tk.Frame):
         # self.list_Films.trace('w',self.select_Film)
         return 0
 
-    def set_table(self, data):
+    def set_table(self, data, predict=0):
         """
         Hiển thị Dataframe lên giao diện
         - Input: Dataframe: data
         - Output: None
         """
 
-        
-        data_rating = data.iloc[:, 0:3].copy()
+        if predict == 0:
+            data_rating = data.iloc[:, 0:3].copy()
 
-        data_info = data.iloc[:, [1, 3,4,5]].drop_duplicates().copy()
-        
+            data_info = data.iloc[:, [1, 3,4,5]].drop_duplicates().copy()
+            
+            
+            self.table_rating = Table(self.bottom_Rating, dataframe=data_rating, showstatusbar=True)
+            self.table_info = Table(self.bottom_Info, dataframe=data_info, showstatusbar=True)
+            self.table_rating.show()
+            self.table_info.show()
+
         self.table = Table(self.bottom, dataframe=data, showstatusbar=True)
-        self.table_rating = Table(self.bottom_Rating, dataframe=data_rating, showstatusbar=True)
-        self.table_info = Table(self.bottom_Info, dataframe=data_info, showstatusbar=True)
         
 
         self.table.show()
-        self.table_rating.show()
-        self.table_info.show()
 
     # sự kiện cho list chọn user
     def select_Method(self, *agrs):
@@ -175,14 +177,15 @@ class Predicit_Movie(tk.Frame):
 
     # sự kiện cho button dự đoán.
     def perdict_System(self):
-        self.chosen_dataset[['user_id','movie_id']] = self.chosen_dataset[['user_id','movie_id']].apply(lambda x: x-1)
-        rs = CF(self.chosen_dataset, k=20, uuCF = self.method, bert=1)
+        data_to_cal =self.chosen_dataset.copy() 
+        data_to_cal[['user_id','movie_id']] = data_to_cal[['user_id','movie_id']].apply(lambda x: x-1)
+        rs = CF(data_to_cal, k=20, uuCF = self.method, bert=1)
         rs.fit()
         full_rating = rs.full_Y()
         df_result = pd.DataFrame(full_rating)
         # print(df_result)
         # print(result)
-        self.set_table(df_result)
+        self.set_table(df_result,1)
         # self.bottom_Display_Perdict.delete(1.0,'end-1c')
         # self.bottom_Display_Perdict.insert("end-1c", "Predict result: "+str(df_result))
         return 0
