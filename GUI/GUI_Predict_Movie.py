@@ -36,8 +36,17 @@ class Predicit_Movie(tk.Frame):
     def panel_Left(self):
         # Frame Table
         self.bottom = tk.Frame(self, background='#DCDCDC')
-        self.bottom.place(x=self.winfo_screenwidth()*0.18, y=self.winfo_screenheight()*0.2, width=self.winfo_screenwidth() *
-                          0.6, height=self.winfo_screenheight()*0.7)
+        self.bottom.place(x=int(self.winfo_screenwidth()/20), y=self.winfo_screenheight()*0.57, width=self.winfo_screenwidth() *
+                          0.9, height=self.winfo_screenheight()*0.37)
+        
+        # Frame Table Rating
+        self.bottom_Rating = tk.Frame(self,background='#DCDCDC')
+        self.bottom_Rating.place(x=int(self.winfo_screenwidth()/20), y=self.winfo_screenheight()*0.14, width=self.winfo_screenwidth() *
+                          0.22, height=self.winfo_screenheight()*0.4)
+        # Frame Table Info
+        self.bottom_Info = tk.Frame(self,background='#DCDCDC')
+        self.bottom_Info.place(x=self.winfo_screenwidth()*0.3, y=self.winfo_screenheight()*0.14, width=self.winfo_screenwidth() *
+                          0.646, height=self.winfo_screenheight()*0.4)
 
         # set label title
         self.title_Predict = tk.Label(
@@ -82,13 +91,13 @@ class Predicit_Movie(tk.Frame):
         # set vị trí của các label, list, button.
         self.title_Predict.place(x=int(self.winfo_screenwidth()/2.2), y=10)
         self.option_Menu_Database.place(
-            x=int(self.winfo_screenwidth()/4), y=100)
-        self.option_Menu_Methods.place(x=int(self.winfo_screenwidth()/2), y=100)
+            x=int(self.winfo_screenwidth()/4), y=self.winfo_screenheight()*0.09)
+        self.option_Menu_Methods.place(x=int(self.winfo_screenwidth()/2), y=self.winfo_screenheight()*0.09)
         # self.option_Menu_Film.place(x=int(self.winfo_screenwidth()/1.5), y=100)
         self.button_Go_Back.place(
-            x=int(self.winfo_screenwidth()/20), y=int(self.winfo_screenheight()/1.2))
+            x=int(self.winfo_screenwidth()/20), y=self.winfo_screenheight()*0.09)
         self.button_Predict.place(
-            x=int(self.winfo_screenwidth()/1.2), y=int(self.winfo_screenheight()/1.2))
+            x=int(self.winfo_screenwidth()/1.2), y=self.winfo_screenheight()*0.09)
 
     def panel_Right(self):
         # set ô text page predict
@@ -128,8 +137,20 @@ class Predicit_Movie(tk.Frame):
         - Input: Dataframe: data
         - Output: None
         """
+
+        
+        data_rating = data.iloc[:, 0:3].copy()
+
+        data_info = data.iloc[:, [1, 3,4,5]].drop_duplicates().copy()
+        
         self.table = Table(self.bottom, dataframe=data, showstatusbar=True)
+        self.table_rating = Table(self.bottom_Rating, dataframe=data_rating, showstatusbar=True)
+        self.table_info = Table(self.bottom_Info, dataframe=data_info, showstatusbar=True)
+        
+
         self.table.show()
+        self.table_rating.show()
+        self.table_info.show()
 
     # sự kiện cho list chọn user
     def select_Method(self, *agrs):

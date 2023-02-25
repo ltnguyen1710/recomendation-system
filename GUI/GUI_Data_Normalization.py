@@ -74,16 +74,8 @@ class Data_Normalization(tk.Frame):
 
         # Frame Table Merge
         self.bottom = tk.Frame(self,background='#DCDCDC')
-        self.bottom.place(x=self.winfo_screenwidth()*0.18, y=self.winfo_screenheight()*0.5, width=self.winfo_screenwidth() *
-                          0.8, height=self.winfo_screenheight()*0.37)
-        # Frame Table Rating
-        self.bottom_Rating = tk.Frame(self,background='#DCDCDC')
-        self.bottom_Rating.place(x=self.winfo_screenwidth()*0.18, y=self.winfo_screenheight()*0.05, width=self.winfo_screenwidth() *
-                          0.22, height=self.winfo_screenheight()*0.4)
-        # Frame Table Info
-        self.bottom_Info = tk.Frame(self,background='#DCDCDC')
-        self.bottom_Info.place(x=self.winfo_screenwidth()*0.42, y=self.winfo_screenheight()*0.05, width=self.winfo_screenwidth() *
-                          0.56, height=self.winfo_screenheight()*0.4)
+        self.bottom.place(x=self.winfo_screenwidth()*0.18, y=self.winfo_screenheight()*0.05, width=self.winfo_screenwidth() *
+                          0.8, height=self.winfo_screenheight()*0.82)
 
         # Frame Button option
         self.bottom_button_function = tk.Frame(self,background='#DCDCDC')
@@ -107,18 +99,12 @@ class Data_Normalization(tk.Frame):
         - Input: Dataframe: data
         - Output: None
         """
-        data_rating = data.iloc[:, 0:3].copy()
-
-        data_info = data.iloc[:, 3:].drop_duplicates().copy()
-        
 
         self.table = Table(self.bottom, dataframe=data, showstatusbar=True)
-        self.table_rating = Table(self.bottom_Rating, dataframe=data_rating, showstatusbar=True)
-        self.table_info = Table(self.bottom_Info, dataframe=data_info, showstatusbar=True)
+
 
         self.table.show()
-        self.table_rating.show()
-        self.table_info.show()
+
 
     # Lấy dữ liệu table đang hiển thị
     def get_currentTable(self):
@@ -139,8 +125,7 @@ class Data_Normalization(tk.Frame):
         
         
         self.table.redraw()
-        self.table_rating.redraw()
-        self.table_info.redraw()
+
         
     def clear_table(self):
         """
@@ -149,8 +134,7 @@ class Data_Normalization(tk.Frame):
         - Output: None
         """
         self.table.clearTable()
-        self.table_rating.clearTable()
-        self.table_info.clearTable()
+
         
     # sự kiện cho list chọn database
     def data_Normalization(self):
