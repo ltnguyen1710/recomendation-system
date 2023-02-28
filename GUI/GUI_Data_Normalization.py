@@ -34,37 +34,24 @@ class Data_Normalization(tk.Frame):
         # chọn tập dữ liệu từ máy tính
         self.button = tk.Button(self, text="Import data", command=lambda: self.set_table(self.GUI_Import.import_data()))
 
-        # button chuẩn hóa dữ liệu
-        self.normalization = tk.Button(
-            self, text="Data normalization", command=self.data_Normalization)
 
-        # button chay hệ thống
-        self.runSystem = tk.Button(
-            self, text="Run System", command=self.run_Recommendation_System)
 
         # button quay về page index
         self.button_back = tk.Button(self, text="Go back to index",
                                      command=lambda: APP.SampleApp.show_frame(self.controller, 'GUI_index'))
-        # chọn định chuẩn dữ liệu
-        self.list_methods = tk.StringVar()
-        self.list_methods.set("Select methods")
-        self.drop = tk.OptionMenu(
-            self, self.list_methods, "Machine learning", "Statistical")
+
 
         # chọn vị trí của các button, label và text
         self.t1 = tk.Text(self, width=20, height=4)
         self.left.place(x=10, y=10)
         self.button.place(x=10, y=30)
         self.t1.place(x=10, y=60)
-        self.drop.place(x=10, y=150)
-        self.normalization.place(x=10, y=190)
-        self.runSystem.place(x=160, y=700)
-        self.button_back.place(x=50, y=700)
+        self.button_back.place(x=20, y=700)
 
 
 
     def panel_Top(self):
-        self.label = tk.Label(self, text="Data Normalization",
+        self.label = tk.Label(self, text="Import Data For System",
                               font=self.controller.title_font)
         self.label.place(x=int(self.winfo_screenwidth()/2.2), y=5)
 
@@ -137,29 +124,29 @@ class Data_Normalization(tk.Frame):
 
         
     # sự kiện cho list chọn database
-    def data_Normalization(self):
-        df = self.get_currentTable()
-        print(df.dtypes)
-        select_methods = self.list_methods.get()
-        if(select_methods=="Machine learning"):
-            self.set_table(self.CONTROL_ML.Test(df).fillna(value=''))
-            # self.set_table(self.CONTROL_ML.Test(df))
-            self.alert_Normalization()
-        elif(select_methods=="Statistical"):
-            # self.CONTROL_Sta.Test()
-            df_prepare = self.CONTROL_Sta.prepare(df)
-            print(df_prepare.dtypes)
-            df_label = self.CONTROL_Sta.label_for_non_date_dtype(df_prepare)
-            df_label = self.CONTROL_Sta.label_for_date_dtype(df_label)
-            self.CONTROL_Sta.calculate_correof(df_prepare)
-            print(self.CONTROL_Sta.corrcoef)
-            self.GUI_Result = GUI_Result.GUI_Result(self)
-            self.GUI_Result.df_result = self.CONTROL_Sta.corrcoef.copy()
-            self.GUI_Result.open_import()
+    # def data_Normalization(self):
+    #     df = self.get_currentTable()
+    #     print(df.dtypes)
+    #     select_methods = self.list_methods.get()
+    #     if(select_methods=="Machine learning"):
+    #         self.set_table(self.CONTROL_ML.Test(df).fillna(value=''))
+    #         # self.set_table(self.CONTROL_ML.Test(df))
+    #         self.alert_Normalization()
+    #     elif(select_methods=="Statistical"):
+    #         # self.CONTROL_Sta.Test()
+    #         df_prepare = self.CONTROL_Sta.prepare(df)
+    #         print(df_prepare.dtypes)
+    #         df_label = self.CONTROL_Sta.label_for_non_date_dtype(df_prepare)
+    #         df_label = self.CONTROL_Sta.label_for_date_dtype(df_label)
+    #         self.CONTROL_Sta.calculate_correof(df_prepare)
+    #         print(self.CONTROL_Sta.corrcoef)
+    #         # self.GUI_Result = GUI_Result.GUI_Result(self)
+    #         self.GUI_Result.df_result = self.CONTROL_Sta.corrcoef.copy()
+    #         self.GUI_Result.open_import()
     
-    # sự kiện của button chạy hệ thống
-    def run_Recommendation_System(self):
-        return 0
+    # # sự kiện của button chạy hệ thống
+    # def run_Recommendation_System(self):
+    #     return 0
 
     def alert_Normalization(self):
         showinfo('Alert', self.CONTROL_ML.alert())
