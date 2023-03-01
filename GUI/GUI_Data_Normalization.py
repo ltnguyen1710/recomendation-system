@@ -37,7 +37,7 @@ class Data_Normalization(tk.Frame):
 
 
         # button quay về page index
-        self.button_back = tk.Button(self, text="Go back to index",
+        self.button_back = tk.Button(self, text="Go back to menu",
                                      command=lambda: APP.SampleApp.show_frame(self.controller, 'GUI_index'))
 
 
@@ -46,7 +46,9 @@ class Data_Normalization(tk.Frame):
         self.left.place(x=10, y=10)
         self.button.place(x=10, y=30)
         self.t1.place(x=10, y=60)
-        self.button_back.place(x=20, y=700)
+        self.button_back.place(x=20, y=780)
+        # self.button_back.config(height= 20, width= 20)
+        
 
 
 
