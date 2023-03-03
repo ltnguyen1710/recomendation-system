@@ -4,6 +4,7 @@ from time import strftime
 from tkinter.messagebox import showinfo
 from tkinter.filedialog import askopenfile
 from tkinter import filedialog, Label, Button, Entry, StringVar
+from PIL import Image
 from pandastable import Table
 import pandas as pd
 import tkinter as tk
@@ -53,14 +54,17 @@ class Predicit_Movie(tk.Frame):
             self, text="Predict Movie", font=self.controller.title_font)
 
         # set list chọn dataset
+        self.option_Database = self.CONTROL_getInfo.get_list_Table()
         self.list_Database = tk.StringVar()
         self.list_Database.set("Select database")
-        self.option_Database = self.CONTROL_getInfo.get_list_Table()
+        self.list_Database.trace('w', self.select_Database)
+
+
         self.option_Menu_Database = tk.OptionMenu(
-            self, self.list_Database, *self.option_Database, command=self.select_Database)
+            self, self.list_Database, *self.option_Database)
 
         # button go back đã được setup
-        self.button_Go_Back = tk.Button(self, text="Go back to index",
+        self.button_Go_Back = tk.Button(self, text="Go back to menu",
                                         command=lambda: APP.SampleApp.show_frame(self.controller, "GUI_index"))
 
         # set list chọn method
@@ -87,17 +91,28 @@ class Predicit_Movie(tk.Frame):
         # set button dự đoán.
         self.button_Predict = tk.Button(
             self, text="Start Predict", command=self.perdict_System)
+        
+        path = glob.glob('img/Btn_refresh.png')
+        # Creating a photoimage object to use image
+        icon = tk.PhotoImage(file=path)
+        icon = icon.subsample(15, 15)
+        
 
+        # set button Refresh DTB.
+        self.button_Refresh_DTB = tk.Button(
+            self, text="Refresh list Database", image=icon, command=self.refresh_listOption_DTB)
+        self.button_Refresh_DTB.image=icon
         # set vị trí của các label, list, button.
-        self.title_Predict.place(x=int(self.winfo_screenwidth()/2.2), y=10)
+        self.title_Predict.place(x=int(self.winfo_screenwidth()/2.2), y=10,height=30)
         self.option_Menu_Database.place(
-            x=int(self.winfo_screenwidth()/4), y=self.winfo_screenheight()*0.09)
-        self.option_Menu_Methods.place(x=int(self.winfo_screenwidth()/2), y=self.winfo_screenheight()*0.09)
-        # self.option_Menu_Film.place(x=int(self.winfo_screenwidth()/1.5), y=100)
+            x=int(self.winfo_screenwidth()/4), y=self.winfo_screenheight()*0.09,height=30, width=180)
+        self.button_Refresh_DTB.place(
+            x=int(self.winfo_screenwidth()/2.6), y=self.winfo_screenheight()*0.09, width=30,height=30)
+        self.option_Menu_Methods.place(x=int(self.winfo_screenwidth()/2), y=self.winfo_screenheight()*0.09,height=30)
         self.button_Go_Back.place(
-            x=int(self.winfo_screenwidth()/20), y=self.winfo_screenheight()*0.09)
+            x=int(self.winfo_screenwidth()/20), y=self.winfo_screenheight()*0.09,height=30)
         self.button_Predict.place(
-            x=int(self.winfo_screenwidth()/1.2), y=self.winfo_screenheight()*0.09)
+            x=int(self.winfo_screenwidth()/1.2), y=self.winfo_screenheight()*0.09,height=30)
 
     def panel_Right(self):
         # set ô text page predict
@@ -107,8 +122,9 @@ class Predicit_Movie(tk.Frame):
             x=int(self.winfo_screenwidth()/4), y=int(self.winfo_screenheight()/5))
 
     # sự kiện cho list chọn database
-    def select_Database(self, selection):
-        print(selection)
+    def select_Database(self, *args):
+        selection = self.list_Database.get()
+        print (selection)
         sql = "select * from "+str(selection)
         self.chosen_dataset = self.CONTROL_getInfo.query_table(sql)
         self.set_table(self.chosen_dataset.copy())
@@ -130,6 +146,16 @@ class Predicit_Movie(tk.Frame):
         #     self.option_Menu_Film['menu'].add_command(label=choice, command=tk._setit(self.list_Films, choice))
         # self.list_Films.trace('w',self.select_Film)
         return 0
+
+    def refresh_listOption_DTB(self):
+        self.option_Database = self.CONTROL_getInfo.get_list_Table()
+        # Reset var and delete all old options        
+        menu = self.option_Menu_Database["menu"]
+        menu.delete(0, "end")
+
+        for choice in self.option_Database:
+            menu.add_command(label=choice, 
+                             command=lambda value=choice: self.list_Database.set(value))
 
     def set_table(self, data, predict=0):
         """

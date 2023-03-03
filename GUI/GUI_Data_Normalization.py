@@ -46,7 +46,7 @@ class Data_Normalization(tk.Frame):
         self.left.place(x=10, y=10)
         self.button.place(x=10, y=30)
         self.t1.place(x=10, y=60)
-        self.button_back.place(x=20, y=780)
+        self.button_back.place(x=20, y=self.winfo_screenheight()-100)
         # self.button_back.config(height= 20, width= 20)
         
 
