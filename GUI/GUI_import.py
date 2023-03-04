@@ -5,8 +5,8 @@ import threading
 import pandas as pd
 from tkinter import filedialog as fd
 from tkinter.messagebox import askyesno
-import time
-import GUI_Predict_Movie as PM
+
+import os
 
 
 
@@ -16,13 +16,10 @@ sys.path.insert(0, 'CONTROL')
 from CONTROL_import import CONTROL_import
 
 
-
-
 class GUI_import:
     def __init__(self, root):
         self.single_import = None
         self.CONTROL_import = CONTROL_import()
-
         self.root = root
         # self.root.bind("<<PhishDoneEvent>>", self.report_done)
     def generate_reports(self):
@@ -52,7 +49,11 @@ class GUI_import:
             filetypes=filetypes)
         path = ''.join(filenames)  # Convert Filenames to Str
         df = pd.read_csv(path)
-        
+      
+
+        # name = os.path.basename(filenames[0])
+        # print(name.replace(".csv", ""))
+
         return df
 
     def close_import(self):
@@ -103,7 +104,9 @@ class GUI_import:
                 label_table_name.grid(column=0, row=0, sticky='w', padx=5, pady=5)
 
                 self.input_name_table = Text(
-                    self.single_import, height=2, width=25)
+                    self.single_import, height=1, width=25)
+                self.input_name_table.config(wrap='none')
+
                 self.input_name_table.grid(
                     column=0, row=1, sticky='w', padx=5, pady=5)
 

@@ -2,6 +2,7 @@ import tkinter as tk
 import pandas as pd
 from pandastable import Table
 from tkinter.messagebox import showinfo
+from tkinter import messagebox
 
 # ------------------------Import Package GUI------------------------
 import GUI_import as guiImport
@@ -43,7 +44,7 @@ class Data_Normalization(tk.Frame):
         # chọn vị trí của các button, label và text
         self.left.place(x=10, y=10)
         self.button.place(x=10, y=30)
-        self.button_back.place(x=20, y=self.winfo_screenheight()*0.9)
+        self.button_back.place(x=10, y=self.winfo_screenheight()*0.9)
         # self.button_back.config(height= 20, width= 20)
         
 
@@ -99,8 +100,12 @@ class Data_Normalization(tk.Frame):
         - Input: None
         - Output: Dataframe: data
         """
-        df = self.table.model.df
-        return df
+        try:
+            df = self.table.model.df
+        except:
+            messagebox.showinfo("Alert", 'Please Import Data...')
+        finally:
+            return df
 
     def refresh_table(self):
         """
