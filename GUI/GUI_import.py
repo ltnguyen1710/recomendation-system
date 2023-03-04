@@ -68,7 +68,7 @@ class GUI_import:
         Kiểm soát cửa sổ bật lên là DUY NHẤT với biến self.single_import
         """
         if df.empty:
-            print('DataFrame is empty!')
+            messagebox.showinfo("Alert", 'Please Import Data !!!')
         else:
             self.single_import
             if self.single_import is None:

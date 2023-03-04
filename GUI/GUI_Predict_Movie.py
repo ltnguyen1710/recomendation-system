@@ -1,12 +1,12 @@
 import glob
 import App as APP
 from time import strftime
-from tkinter.messagebox import showinfo
+from tkinter import messagebox
 from tkinter.filedialog import askopenfile
 from tkinter import filedialog, Label, Button, Entry, StringVar
-from PIL import Image
 from pandastable import Table
 import pandas as pd
+from tkinter import font as tkfont  
 import tkinter as tk
 # ------------------------Import Package CONTROL------------------------
 import sys
@@ -26,6 +26,11 @@ class Predicit_Movie(tk.Frame):
         self.bg = tk.PhotoImage(file=path)
         self.my_Label = tk.Label(self, image=self.bg)
         self.my_Label.place(relwidth=1, relheight=1)
+        # Khởi tạo 2 biến OptionMenu
+        self.chosen_dataset = pd.DataFrame()
+        self.method = None
+        self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
+
         self.initUI()
 
     def initUI(self):
@@ -126,6 +131,7 @@ class Predicit_Movie(tk.Frame):
         selection = self.list_Database.get()
         print (selection)
         sql = "select * from "+str(selection)
+        
         self.chosen_dataset = self.CONTROL_getInfo.query_table(sql)
         self.set_table(self.chosen_dataset.copy())
         # set list user
@@ -200,18 +206,50 @@ class Predicit_Movie(tk.Frame):
         print(self.list_Films.get())
         # self.chosen_movie= self.CONTROL_getInfo.get_movie_info_by_id(self.list_Films.get())
         return 0
+    def result_predict_table(self,df_result):
+    	
+        
+        result_window = tk.Toplevel()
+        result_window.title("RESULT PREDICT TABLE")
+        result_window.state('zoomed')
+
+        Label(result_window,
+            text ="RESULT PREDICT TABLE", font=self.title_font).pack()
+        
+        bottom = tk.Frame(result_window,background='#DCDCDC')
+        # ----------- Mở cửa sổ chính giữa màn hình-----------
+
+        screen_width = result_window.winfo_screenwidth()
+        screen_height = result_window.winfo_screenheight()
+        # Coordinates of the upper left corner of the window to make the window appear in the center
+        window_width =result_window.winfo_screenwidth() *0.8
+        window_height = result_window.winfo_screenheight()*0.82
+        x_cordinate = int((screen_width/2) - (window_width/2))
+        y_cordinate = int((screen_height/2) - (window_height/2))
+        
+        # ----------- Mở cửa sổ chính giữa màn hình-----------
+        bottom.place(x=x_cordinate, y=y_cordinate, width=window_width, height=window_height)
+        table_result = Table(bottom, dataframe=df_result, showstatusbar=True)
+        table_result.show()
 
     # sự kiện cho button dự đoán.
     def perdict_System(self):
-        data_to_cal =self.chosen_dataset.copy() 
-        data_to_cal[['user_id','movie_id']] = data_to_cal[['user_id','movie_id']].apply(lambda x: x-1)
-        rs = CF(data_to_cal, k=20, uuCF = self.method, bert=1)
-        rs.fit()
-        full_rating = rs.full_Y()
-        df_result = pd.DataFrame(full_rating)
-        # print(df_result)
-        # print(result)
-        self.set_table(df_result,1)
-        # self.bottom_Display_Perdict.delete(1.0,'end-1c')
-        # self.bottom_Display_Perdict.insert("end-1c", "Predict result: "+str(df_result))
-        return 0
+        
+
+        if self.chosen_dataset.empty:
+            messagebox.showinfo("Alert", 'Please Select Database')
+        elif self.method is None:
+            messagebox.showinfo("Alert", 'Please Select Method')
+        else:
+            data_to_cal =self.chosen_dataset.copy() 
+            data_to_cal[['user_id','movie_id']] = data_to_cal[['user_id','movie_id']].apply(lambda x: x-1)
+            rs = CF(data_to_cal, k=20, uuCF = self.method, bert=1)
+            rs.fit()
+            full_rating = rs.full_Y()
+            df_result = pd.DataFrame(full_rating)
+            # print(df_result)
+            # print(result)
+            # self.bottom_Display_Perdict.delete(1.0,'end-1c')
+            # self.bottom_Display_Perdict.insert("end-1c", "Predict result: "+str(df_result))
+            self.result_predict_table(df_result)
+            return 0

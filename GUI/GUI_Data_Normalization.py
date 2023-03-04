@@ -1,5 +1,5 @@
 import tkinter as tk
-
+import pandas as pd
 from pandastable import Table
 from tkinter.messagebox import showinfo
 
@@ -21,6 +21,7 @@ class Data_Normalization(tk.Frame):
         self.GUI_Import = guiImport.GUI_import(self)
         self.CONTROL_ML = CONTROL_ML_Normalization()
         self.CONTROL_Sta = CONTROL_Statistical_Normalization()
+        self.table = pd.DataFrame()
         self.initUI()
 
     def initUI(self):
@@ -34,19 +35,15 @@ class Data_Normalization(tk.Frame):
         # chọn tập dữ liệu từ máy tính
         self.button = tk.Button(self, text="Import data", command=lambda: self.set_table(self.GUI_Import.import_data()))
 
-
-
         # button quay về page index
         self.button_back = tk.Button(self, text="Go back to menu",
                                      command=lambda: APP.SampleApp.show_frame(self.controller, 'GUI_index'))
 
 
         # chọn vị trí của các button, label và text
-        self.t1 = tk.Text(self, width=20, height=4)
         self.left.place(x=10, y=10)
         self.button.place(x=10, y=30)
-        self.t1.place(x=10, y=60)
-        self.button_back.place(x=20, y=self.winfo_screenheight()-100)
+        self.button_back.place(x=20, y=self.winfo_screenheight()*0.9)
         # self.button_back.config(height= 20, width= 20)
         
 
@@ -61,7 +58,7 @@ class Data_Normalization(tk.Frame):
 
         # Để mặc định là Frame để display dễ hơn dạng Text
 
-        # Frame Table Merge
+        # Frame Table 
         self.bottom = tk.Frame(self,background='#DCDCDC')
         self.bottom.place(x=self.winfo_screenwidth()*0.18, y=self.winfo_screenheight()*0.05, width=self.winfo_screenwidth() *
                           0.8, height=self.winfo_screenheight()*0.82)
