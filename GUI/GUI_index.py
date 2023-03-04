@@ -1,5 +1,6 @@
-import tkinter as tk 
+import tkinter as tk
 import glob
+from CanvasButton import CanvasButton
 
 
 '''
@@ -7,32 +8,28 @@ class này hiển thị các phần button của trang index của hệ thống
 
 '''
 
+
 class GUI_index(tk.Frame):
-    
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-       
-        # hiển thị nền cho page.
-        path=glob.glob('img/BG.png')
-        self.bg = tk.PhotoImage(file = path)
 
-        self.my_Label = tk.Label(self, image= self.bg)
-        self.my_Label.place(relwidth= 1, relheight= 1)
-       
+        # hiển thị nền cho page.
+        canvas = tk.Canvas(self, width = self.winfo_screenwidth(), height = self.winfo_screenheight())
+        canvas.pack()
+        path = glob.glob('img/BG.png')
+        self.bg = tk.PhotoImage(file=path)
+
         # set label hiển thị trên page index.
-        label = tk.Label(self, text="Recommendation System Application", font=controller.title_font)
-        label.place(x = int(self.winfo_screenwidth())/3,y=10)
-       
-        # button chuyển qua page định chuẩn dữ liệu.
-        self.button_Data = tk.Button(self, text="Data Normalization",font="23",fg='#A50C0C', bg="#C0C0C0",
-                            command=lambda: controller.show_frame("Data_Normalization"))
-        
-        # button chuyển qua page predict movie.
-        self.button_Predict = tk.Button(self, text="    Predict Movie   ",font="23",fg='#A50C0C', bg="#C0C0C0",
-                            command=lambda: controller.show_frame("Predicit_Movie"))
-        # set vị trị cho 2 button
-        self.button_Data.place(x = int(self.winfo_screenwidth())/1.3, y = int(self.winfo_screenheight())/8)
-        self.button_Predict.place(x = int(self.winfo_screenwidth())/1.3, y = int(self.winfo_screenheight())/5)
-        
-    
+        # label = tk.Label(
+        #     self, text="Recommendation System Application", font=controller.title_font)
+        # label.place(x=int(self.winfo_screenwidth())/3, y=10)
+
+        background = canvas.create_image(0, 0, image=self.bg,anchor='nw')
+        label = canvas.create_text(int(self.winfo_screenwidth())/2, 20, text="Recommendation System Application",font=controller.title_font)
+
+        button_Import = CanvasButton(canvas,int(self.winfo_screenwidth())/1.3, int(self.winfo_screenheight())/8, 'img/Btn_1.png',lambda: controller.show_frame("Data_Normalization"))
+
+        button_Recommendation = CanvasButton(canvas, int(self.winfo_screenwidth())/1.3, int(self.winfo_screenheight())/3, 'img/Btn_1.png',lambda: controller.show_frame("Predicit_Movie"))
+

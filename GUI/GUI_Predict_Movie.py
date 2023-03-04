@@ -195,17 +195,6 @@ class Predicit_Movie(tk.Frame):
         else:
             self.method = 0
 
-    def select_User(self):
-        print(self.list_Users.get())
-        self.chosen_user = self.CONTROL_getInfo.get_user_info_by_id(
-            self.list_Users.get())
-        return 0
-
-    # sự kiện cho list chọn film
-    def select_Film(self):
-        print(self.list_Films.get())
-        # self.chosen_movie= self.CONTROL_getInfo.get_movie_info_by_id(self.list_Films.get())
-        return 0
     def result_predict_table(self,df_result):
     	
         

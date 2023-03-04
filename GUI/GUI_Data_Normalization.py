@@ -11,8 +11,6 @@ import App as APP
 # ------------------------Import Package CONTROL------------------------
 import sys
 sys.path.insert(0, 'CONTROL')
-from CONTROL_ML_Normalization import CONTROL_ML_Normalization
-from CONTROL_Statistical_Normalization import CONTROL_Statistical_Normalization
 
 class Data_Normalization(tk.Frame):
 
@@ -20,8 +18,6 @@ class Data_Normalization(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         self.GUI_Import = guiImport.GUI_import(self)
-        self.CONTROL_ML = CONTROL_ML_Normalization()
-        self.CONTROL_Sta = CONTROL_Statistical_Normalization()
         self.table = pd.DataFrame()
         self.initUI()
 
