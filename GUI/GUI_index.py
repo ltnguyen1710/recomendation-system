@@ -30,6 +30,7 @@ class GUI_index(tk.Frame):
         label = canvas.create_text(int(self.winfo_screenwidth())/2, 20, text="Recommendation System Application",font=controller.title_font)
 
         button_Import = CanvasButton(canvas,int(self.winfo_screenwidth())/1.3, int(self.winfo_screenheight())/8, 'img/Btn_1.png',lambda: controller.show_frame("Data_Normalization"))
-
+        label_Import = canvas.create_text(int(self.winfo_screenwidth())-(int(self.winfo_screenwidth())/5), int(self.winfo_screenheight())/5, text="Import",font=controller.title_font)
+        
         button_Recommendation = CanvasButton(canvas, int(self.winfo_screenwidth())/1.3, int(self.winfo_screenheight())/3, 'img/Btn_1.png',lambda: controller.show_frame("Predicit_Movie"))
-
+        # label_Recommendation = canvas.create_text(int(self.winfo_screenwidth())/4, 40, text="Recommendation",font=controller.title_font)

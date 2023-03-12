@@ -1,5 +1,6 @@
 import tkinter as tk
 import pandas as pd
+import glob
 from pandastable import Table
 from tkinter.messagebox import showinfo
 from tkinter import messagebox
@@ -22,13 +23,12 @@ class Data_Normalization(tk.Frame):
         self.initUI()
 
     def initUI(self):
-        self.panel_Left()
         self.panel_Top()
+        self.panel_Left()
         self.panel_Bottom()
 
     def panel_Left(self):
-        self.left = tk.Label(self, text="Select data with CSV file")
-
+        label = self.canvas.create_text(self.winfo_screenwidth()/17, 15, text="Select data with CSV file")
         # chọn tập dữ liệu từ máy tính
         self.button = tk.Button(self, text="Import data", command=lambda: self.set_table(self.GUI_Import.import_data()))
 
@@ -38,7 +38,6 @@ class Data_Normalization(tk.Frame):
 
 
         # chọn vị trí của các button, label và text
-        self.left.place(x=10, y=10)
         self.button.place(x=10, y=30)
         self.button_back.place(x=10, y=self.winfo_screenheight()*0.9)
         # self.button_back.config(height= 20, width= 20)
@@ -47,9 +46,13 @@ class Data_Normalization(tk.Frame):
 
 
     def panel_Top(self):
-        self.label = tk.Label(self, text="Import Data For System",
-                              font=self.controller.title_font)
-        self.label.place(x=int(self.winfo_screenwidth()/2.2), y=5)
+        self.canvas = tk.Canvas(self, width = self.winfo_screenwidth(), height = self.winfo_screenheight())
+        self.canvas.pack()
+        path = glob.glob('img/BG_predict.png')
+        self.bg = tk.PhotoImage(file=path)
+
+        background = self.canvas.create_image(0, 0, image=self.bg,anchor='nw')
+        label = self.canvas.create_text(int(self.winfo_screenwidth())/2, 20, text="Import Data For System",font=self.controller.title_font)
 
     def panel_Bottom(self):
 
@@ -59,6 +62,10 @@ class Data_Normalization(tk.Frame):
         self.bottom = tk.Frame(self,background='#DCDCDC')
         self.bottom.place(x=self.winfo_screenwidth()*0.18, y=self.winfo_screenheight()*0.05, width=self.winfo_screenwidth() *
                           0.8, height=self.winfo_screenheight()*0.82)
+        data = pd.DataFrame()
+        self.table = Table(self.bottom, dataframe=data, showstatusbar=True)
+        self.table.show()
+        self.table.redraw()
 
         # Frame Button option
         self.bottom_button_function = tk.Frame(self,background='#DCDCDC')
@@ -87,6 +94,7 @@ class Data_Normalization(tk.Frame):
 
 
         self.table.show()
+        self.table.redraw()
 
 
     # Lấy dữ liệu table đang hiển thị

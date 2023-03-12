@@ -21,11 +21,13 @@ class Predicit_Movie(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         self.CONTROL_getInfo = CONTROL_getInfo()
+        canvas = tk.Canvas(self, width = self.winfo_screenwidth(), height = self.winfo_screenheight())
+        canvas.pack()
         # set bg cho page predict
         path = glob.glob('img/BG_predict.png')
         self.bg = tk.PhotoImage(file=path)
-        self.my_Label = tk.Label(self, image=self.bg)
-        self.my_Label.place(relwidth=1, relheight=1)
+        background = canvas.create_image(0, 0, image=self.bg,anchor='nw')
+        label = canvas.create_text(int(self.winfo_screenwidth())/2, 20, text="Recommendation",font=controller.title_font)
         # Khởi tạo 2 biến OptionMenu
         self.chosen_dataset = pd.DataFrame()
         self.method = None
@@ -44,20 +46,26 @@ class Predicit_Movie(tk.Frame):
         self.bottom = tk.Frame(self, background='#DCDCDC')
         self.bottom.place(x=int(self.winfo_screenwidth()/20), y=self.winfo_screenheight()*0.57, width=self.winfo_screenwidth() *
                           0.9, height=self.winfo_screenheight()*0.37)
-        
+        data = pd.DataFrame()
+        self.table = Table(self.bottom, dataframe=data, showstatusbar=True)
+        self.table.show()
+        self.table.redraw()
         # Frame Table Rating
         self.bottom_Rating = tk.Frame(self,background='#DCDCDC')
         self.bottom_Rating.place(x=int(self.winfo_screenwidth()/20), y=self.winfo_screenheight()*0.14, width=self.winfo_screenwidth() *
                           0.22, height=self.winfo_screenheight()*0.4)
+        
+        self.table_rating = Table(self.bottom_Rating, dataframe=data, showstatusbar=True)
+        self.table_rating.show()
+        self.table_rating.redraw()
         # Frame Table Info
         self.bottom_Info = tk.Frame(self,background='#DCDCDC')
         self.bottom_Info.place(x=self.winfo_screenwidth()*0.3, y=self.winfo_screenheight()*0.14, width=self.winfo_screenwidth() *
                           0.646, height=self.winfo_screenheight()*0.4)
 
-        # set label title
-        self.title_Predict = tk.Label(
-            self, text="Predict Movie", font=self.controller.title_font)
-
+        self.table_info = Table(self.bottom_Info, dataframe=data, showstatusbar=True)
+        self.table_info.show()
+        self.table_info.redraw()
         # set list chọn dataset
         self.option_Database = self.CONTROL_getInfo.get_list_Table()
         self.list_Database = tk.StringVar()
@@ -79,20 +87,6 @@ class Predicit_Movie(tk.Frame):
         self.option_Menu_Methods = tk.OptionMenu(
             self, self.list_Methods, *self.option_Methods , command=self.select_Method)
 
-        # set list chọn user
-        # self.list_Users = tk.StringVar()
-        # self.list_Users.set("Select users")
-        # self.option_Users = ['A', 'B', 'C']
-        # self.option_Menu_Users = tk.OptionMenu(
-        #     self, self.list_Users, *self.option_Users, command=self.select_User)
-
-        # set list chọn film
-        # self.list_Films = tk.StringVar()
-        # self.list_Films.set("Select films")
-        # self.option_Film = ['A', 'X', 'S']
-        # self.option_Menu_Film = tk.OptionMenu(
-        #     self, self.list_Films, *self.option_Film, command=self.select_Film)
-
         # set button dự đoán.
         self.button_Predict = tk.Button(
             self, text="Start Predict", command=self.perdict_System)
@@ -108,11 +102,10 @@ class Predicit_Movie(tk.Frame):
             self, text="Refresh list Database", image=icon, command=self.refresh_listOption_DTB)
         self.button_Refresh_DTB.image=icon
         # set vị trí của các label, list, button.
-        self.title_Predict.place(x=int(self.winfo_screenwidth()/2.2), y=10,height=30)
         self.option_Menu_Database.place(
             x=int(self.winfo_screenwidth()/4), y=self.winfo_screenheight()*0.09,height=30, width=180)
         self.button_Refresh_DTB.place(
-            x=int(self.winfo_screenwidth()/2.6), y=self.winfo_screenheight()*0.09, width=30,height=30)
+            x=int(self.winfo_screenwidth()/2.5), y=self.winfo_screenheight()*0.09, width=30,height=30)
         self.option_Menu_Methods.place(x=int(self.winfo_screenwidth()/2), y=self.winfo_screenheight()*0.09,height=30)
         self.button_Go_Back.place(
             x=int(self.winfo_screenwidth()/20), y=self.winfo_screenheight()*0.09,height=30)
@@ -134,23 +127,6 @@ class Predicit_Movie(tk.Frame):
         
         self.chosen_dataset = self.CONTROL_getInfo.query_table(sql)
         self.set_table(self.chosen_dataset.copy())
-        # set list user
-        # self.user_list = self.CONTROL_getInfo.get_user_info(
-        #     self.chosen_dataset.copy())
-        # self.option_Users = self.user_list.user_id.values
-        # self.option_Menu_Users['menu'].delete(0, 'end')
-        # for choice in self.option_Users:
-        #     self.option_Menu_Users['menu'].add_command(
-        #         label=choice, command=tk._setit(self.list_Users, choice))
-        # self.list_Users.trace('w', self.select_User)
-        # # set list film
-        # self.movie_list = self.CONTROL_getInfo.get_movie_info(
-        #     self.chosen_dataset.copy())
-        # self.option_Film = self.movie_list.movie_id.values
-        # self.option_Menu_Film['menu'].delete(0,'end')
-        # for choice in self.option_Film:
-        #     self.option_Menu_Film['menu'].add_command(label=choice, command=tk._setit(self.list_Films, choice))
-        # self.list_Films.trace('w',self.select_Film)
         return 0
 
     def refresh_listOption_DTB(self):
@@ -185,6 +161,9 @@ class Predicit_Movie(tk.Frame):
         
 
         self.table.show()
+        self.table_rating.redraw()
+        self.table_info.redraw()
+        self.table.redraw()
 
     # sự kiện cho list chọn user
     def select_Method(self, *agrs):
@@ -236,9 +215,5 @@ class Predicit_Movie(tk.Frame):
             rs.fit()
             full_rating = rs.full_Y()
             df_result = pd.DataFrame(full_rating)
-            # print(df_result)
-            # print(result)
-            # self.bottom_Display_Perdict.delete(1.0,'end-1c')
-            # self.bottom_Display_Perdict.insert("end-1c", "Predict result: "+str(df_result))
             self.result_predict_table(df_result)
             return 0
