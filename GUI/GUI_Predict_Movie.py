@@ -26,8 +26,14 @@ class Predicit_Movie(tk.Frame):
         # set bg cho page predict
         path = glob.glob('img/BG_predict.png')
         self.bg = tk.PhotoImage(file=path)
+        font = tkfont.Font(family='Helvetica', size=20, weight="bold", slant="italic")
+
         background = canvas.create_image(0, 0, image=self.bg,anchor='nw')
-        label = canvas.create_text(int(self.winfo_screenwidth())/2, 20, text="Recommendation",font=controller.title_font)
+        label = canvas.create_text(int(self.winfo_screenwidth())/2, 30, text="Recommendation",font=controller.title_font)
+        label_Rating = canvas.create_text(self.winfo_screenwidth()*0.16, self.winfo_screenheight()*0.87, text="Ratings user for item ",font=font,fill="white")
+        label_Info = canvas.create_text(self.winfo_screenwidth()*0.65, self.winfo_screenheight()*0.87, text="Information of movie",font=font,fill="white")
+
+        
         # Khởi tạo 2 biến OptionMenu
         self.chosen_dataset = pd.DataFrame()
         self.method = None
@@ -42,30 +48,26 @@ class Predicit_Movie(tk.Frame):
 
 
     def panel_Left(self):
-        # Frame Table
-        self.bottom = tk.Frame(self, background='#DCDCDC')
-        self.bottom.place(x=int(self.winfo_screenwidth()/20), y=self.winfo_screenheight()*0.57, width=self.winfo_screenwidth() *
-                          0.9, height=self.winfo_screenheight()*0.37)
         data = pd.DataFrame()
-        self.table = Table(self.bottom, dataframe=data, showstatusbar=True)
-        self.table.show()
-        self.table.redraw()
+        
         # Frame Table Rating
         self.bottom_Rating = tk.Frame(self,background='#DCDCDC')
         self.bottom_Rating.place(x=int(self.winfo_screenwidth()/20), y=self.winfo_screenheight()*0.14, width=self.winfo_screenwidth() *
-                          0.22, height=self.winfo_screenheight()*0.4)
+                          0.22, height=self.winfo_screenheight()*0.7)
         
         self.table_rating = Table(self.bottom_Rating, dataframe=data, showstatusbar=True)
         self.table_rating.show()
         self.table_rating.redraw()
+        
         # Frame Table Info
         self.bottom_Info = tk.Frame(self,background='#DCDCDC')
         self.bottom_Info.place(x=self.winfo_screenwidth()*0.3, y=self.winfo_screenheight()*0.14, width=self.winfo_screenwidth() *
-                          0.646, height=self.winfo_screenheight()*0.4)
+                          0.646, height=self.winfo_screenheight()*0.7)
 
         self.table_info = Table(self.bottom_Info, dataframe=data, showstatusbar=True)
         self.table_info.show()
         self.table_info.redraw()
+         
         # set list chọn dataset
         self.option_Database = self.CONTROL_getInfo.get_list_Table()
         self.list_Database = tk.StringVar()
@@ -157,13 +159,8 @@ class Predicit_Movie(tk.Frame):
             self.table_rating.show()
             self.table_info.show()
 
-        self.table = Table(self.bottom, dataframe=data, showstatusbar=True)
-        
-
-        self.table.show()
         self.table_rating.redraw()
         self.table_info.redraw()
-        self.table.redraw()
 
     # sự kiện cho list chọn user
     def select_Method(self, *agrs):
