@@ -429,4 +429,7 @@ class CF(object):
             else:
                 rating_list[x[i]][y[i]] = self.pred(x[i], y[i], 0)
         self.rating_array = np.array(rating_list).astype(np.float32)
-        return pd.DataFrame(self.rating_array)
+        result = pd.DataFrame(self.rating_array)
+        new_index = pd.RangeIndex(start=1,stop=self.rating_array.shape[1]+1,step=1)
+        result.columns = new_index
+        return result
