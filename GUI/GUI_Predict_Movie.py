@@ -171,7 +171,7 @@ class Predicit_Movie(tk.Frame):
         else:
             self.method = 0
 
-    def result_predict_table(self,df_result):
+    def result_predict_table(self,df_result,mask_color_table):
     	
         
         result_window = tk.Toplevel()
@@ -195,6 +195,18 @@ class Predicit_Movie(tk.Frame):
         # ----------- Mở cửa sổ chính giữa màn hình-----------
         bottom.place(x=x_cordinate, y=y_cordinate, width=window_width, height=window_height)
         table_result = Table(bottom, dataframe=df_result, showstatusbar=True)
+        # ----------- TÔ MÀU cho bảng-----------
+        # Tô cả bảng
+        # for i in range(df_result.shape[0]):
+        #     table_result.setRowColors(rows=i, clr='#F26BAA',  cols="all")
+        table_result.setRowColors(rows=range(df_result.shape[0]), clr='#F26BAA', cols='all')
+        index=0
+        for i in mask_color_table:
+            if len(i) == 0:
+                pass
+            else:
+                table_result.setRowColors(rows=index, clr='#B2EBE0',  cols=i)
+            index = index +1
         table_result.show()
 
     # sự kiện cho button dự đoán.
@@ -210,7 +222,13 @@ class Predicit_Movie(tk.Frame):
             data_to_cal[['user_id','movie_id']] = data_to_cal[['user_id','movie_id']].apply(lambda x: x-1)
             rs = CF(data_to_cal, k=20, uuCF = self.method, bert=1)
             rs.fit()
+            print(self.method)
+            if(self.method ==1):
+                mask_color_table = rs.matrix_to_colortable_u_u()
+            else:    
+                mask_color_table = rs.matrix_to_colortable_i_i()
             full_rating = rs.full_Y()
             df_result = pd.DataFrame(full_rating)
-            self.result_predict_table(df_result)
+            
+            self.result_predict_table(df_result,mask_color_table)
             return 0

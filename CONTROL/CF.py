@@ -198,8 +198,6 @@ class CF(object):
         Ybar = sparse.coo_matrix((Ybar_data[:, 2],
                                   (Ybar_data[:, 1], Ybar_data[:, 0])), (self.n_items, self.n_users))
         Ybar = Ybar.tocsr()
-        print(self.Ybar.shape)
-        print(Ybar.shape)
         self.Ybar = sparse.hstack((self.Ybar, Ybar), format='csr')
 
     def update(self, new_data):
@@ -257,11 +255,11 @@ class CF(object):
         movie_id = self.Y_data_df['movie_id'].unique()
         for i in range(num_of_user):
             list_item_rate_by_user_i = np.array(self.list_item_rate_by_u(i))
-            print(list_item_rate_by_user_i)
+            # print(list_item_rate_by_user_i)
             if len(list_item_rate_by_user_i) > 0:
                 index = [i for i in range(
                     len(list_item_rate_by_user_i)) if list_item_rate_by_user_i[i] in movie_id]
-                print(index)
+                #print(index)
                 list_item_bert_embedding_of_user_i = item_bert_embedding_matrix[:,
                                                                                 index]
             else:
@@ -404,6 +402,23 @@ class CF(object):
         ids = np.where(self.Y_data[:, 0] == int(u))[0]
         items_rated_by_u = self.Y_data[ids, 1].tolist()
         return items_rated_by_u
+    #---------------------Create mask to color Pandastable result
+    def matrix_to_colortable_i_i(self):
+        matrix_color_i_i = []
+        for u in range(self.n_items):
+            ids = np.where(self.Y_data[:, 1] == int(u))[0]
+            items_rated_by_u = self.Y_data[ids, 0].tolist()
+            matrix_color_i_i.append(items_rated_by_u)
+        return matrix_color_i_i
+    
+    def matrix_to_colortable_u_u(self):
+        matrix_color_u_u = []
+        for i in range(self.n_items):
+            ids = np.where(self.Y_data[:, 1] == int(i))[0]
+            users_rated_i = self.Y_data[ids, 0].tolist()
+            matrix_color_u_u.append(users_rated_i)
+        return matrix_color_u_u
+    #---------------------Create mask to color Pandastable result
 
     def print_recommendation(self):
         """
@@ -421,6 +436,7 @@ class CF(object):
 
     def full_Y(self):
         x, y = np.where(self.rating_array == 0)
+        
         rating_list = self.rating_array.tolist()
         for i in range(x.shape[0]):
             # print(y[i])
