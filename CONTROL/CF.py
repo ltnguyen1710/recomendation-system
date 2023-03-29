@@ -448,4 +448,5 @@ class CF(object):
         result = pd.DataFrame(self.rating_array)
         new_index = pd.RangeIndex(start=1,stop=self.rating_array.shape[1]+1,step=1)
         result.columns = new_index
+        
         return result

@@ -194,7 +194,9 @@ class Predicit_Movie(tk.Frame):
         
         # ----------- Mở cửa sổ chính giữa màn hình-----------
         bottom.place(x=x_cordinate, y=y_cordinate, width=window_width, height=window_height)
+        
         table_result = Table(bottom, dataframe=df_result, showstatusbar=True)
+        table_result.rowselectedcolor = 'none'
         # ----------- TÔ MÀU cho bảng-----------
         # Tô cả bảng
         # for i in range(df_result.shape[0]):
