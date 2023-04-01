@@ -85,7 +85,7 @@ class Predicit_Movie(tk.Frame):
         # set list chọn method
         self.list_Methods = tk.StringVar()
         self.list_Methods.set("Select method")
-        self.option_Methods = ['user-user','item-item']
+        self.option_Methods = ['user_user_BERT','item_item_BERT']
         self.option_Menu_Methods = tk.OptionMenu(
             self, self.list_Methods, *self.option_Methods , command=self.select_Method)
 
