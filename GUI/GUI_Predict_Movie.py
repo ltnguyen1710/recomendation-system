@@ -186,7 +186,7 @@ class Predicit_Movie(tk.Frame):
         # Frame select
         frame_select_options = tk.Frame(result_window, borderwidth=2, relief="groove")
         
-        frame_result_table = tk.Frame(result_window,background='#DCDCDC')
+        self.frame_result_table = tk.Frame(result_window,background='#DCDCDC')
         # ----------- Mở cửa sổ chính giữa màn hình-----------
         screen_width = result_window.winfo_screenwidth()
         screen_height = result_window.winfo_screenheight()
@@ -200,19 +200,10 @@ class Predicit_Movie(tk.Frame):
         frame_select_options.place(x=x_cordinate, y=self.winfo_screenheight()*0.15, width=self.winfo_screenwidth() *
                           0.45, height=self.winfo_screenheight()*0.17)
         title_result_table.place(x=self.winfo_screenwidth()*0.4, y=self.winfo_screenheight()*0.36)
-        frame_result_table.place(x=x_cordinate, y=self.winfo_screenheight()*0.4, width=window_width, height=window_height)
+        self.frame_result_table.place(x=x_cordinate, y=self.winfo_screenheight()*0.4, width=window_width, height=window_height)
         
         # -----------------------   
-        demo = pd.DataFrame({
-            'predict_rate': [4,3.9579434,3.7695432,3.5176797],
-            'movie_id': [4,5,2,3],
-            'title': ['Get Shorty (1995)','Copycat (1995)','GoldenEye (1995)','Four Rooms (1995)'],
-            'genres': ['Action|Comedy|Drama','Crime|Drama|Thriller','Action|Adventure|Thriller','Thriller'],
-            'overview': ["Chili Palmer is a Miami mobster who gets sent by his boss, the psychopathic 'Bones' Barboni, to collect a bad debt from Harry Zimm, a Hollywood producer who specializes in cheesy horror films. When Chili meets Harry's leading lady, the romantic sparks fly. After pitching his own life story as a movie idea, Chili learns that being a mobster and being a Hollywood producer really aren't all that different.",
-                        "An agoraphobic psychologist and a female detective must work together to take down a serial killer who copies serial killers from the past.",
-                        "James Bond must unmask the mysterious head of the Janus Syndicate and prevent the leader from utilizing the GoldenEye weapons system to inflict devastating revenge on Britain.",
-                        "It's Ted the Bellhop's first night on the job...and the hotel's very unusual guests are about to place him in some outrageous predicaments. It seems that this evening's room service is serving up one unbelievable happening after another."]
-        })
+        
         # Label
         label_option_User = tk.Label(frame_select_options, text="Select user to recommend:", font=("Arial", 15), bd=0)
         label_option_User.place(x=int(self.winfo_screenwidth()*0.02), y=self.winfo_screenheight()*0.06)
@@ -239,9 +230,11 @@ class Predicit_Movie(tk.Frame):
         # -----------------------
 
 
-        
-        # self.table_result = Table(frame_result_table, dataframe=df_result, showstatusbar=True)
-        self.table_result = Table(frame_result_table, dataframe=demo, showstatusbar=True)
+        data = pd.DataFrame()
+        # self.table_result = Table(self.frame_result_table, dataframe=df_result, showstatusbar=True)
+        self.table_result = Table(self.frame_result_table, dataframe=data, showstatusbar=True)
+        self.table_result.show()
+        self.table_result.redraw()
         self.table_result.rowselectedcolor = 'none'
 
         # # ----------- TÔ MÀU cho bảng-----------
@@ -259,6 +252,18 @@ class Predicit_Movie(tk.Frame):
         # self.table_result.show()
 
     def demo(self):
+        demo = pd.DataFrame({
+            'predict_rate': [4,3.9579434,3.7695432,3.5176797],
+            'movie_id': [4,5,2,3],
+            'title': ['Get Shorty (1995)','Copycat (1995)','GoldenEye (1995)','Four Rooms (1995)'],
+            'genres': ['Action|Comedy|Drama','Crime|Drama|Thriller','Action|Adventure|Thriller','Thriller'],
+            'overview': ["Chili Palmer is a Miami mobster who gets sent by his boss, the psychopathic 'Bones' Barboni, to collect a bad debt from Harry Zimm, a Hollywood producer who specializes in cheesy horror films. When Chili meets Harry's leading lady, the romantic sparks fly. After pitching his own life story as a movie idea, Chili learns that being a mobster and being a Hollywood producer really aren't all that different.",
+                        "An agoraphobic psychologist and a female detective must work together to take down a serial killer who copies serial killers from the past.",
+                        "James Bond must unmask the mysterious head of the Janus Syndicate and prevent the leader from utilizing the GoldenEye weapons system to inflict devastating revenge on Britain.",
+                        "It's Ted the Bellhop's first night on the job...and the hotel's very unusual guests are about to place him in some outrageous predicaments. It seems that this evening's room service is serving up one unbelievable happening after another."]
+        })
+        self.table_result = Table(self.frame_result_table, dataframe=demo, showstatusbar=True)
+
         self.table_result.show()
         self.table_result.autoResizeColumns()
         self.table_result.redraw()
