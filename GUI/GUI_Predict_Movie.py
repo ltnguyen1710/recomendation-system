@@ -8,6 +8,10 @@ from pandastable import Table
 import pandas as pd
 from tkinter import font as tkfont  
 import tkinter as tk
+# Import the required libraries
+from tkinter import *
+from PIL import Image, ImageTk
+
 # ------------------------Import Package CONTROL------------------------
 import sys
 sys.path.insert(0, 'CONTROL')
@@ -166,50 +170,98 @@ class Predicit_Movie(tk.Frame):
     def select_Method(self, *agrs):
         selected = self.list_Methods.get()
         print(selected)
-        if selected == 'user-user':
+        if selected == "user_user_BERT":
             self.method = 1
         else:
             self.method = 0
-
-    def result_predict_table(self,df_result,mask_color_table):
+    def result_predict_table(self,df_result,mask_color_table,title_windown):
     	
         
         result_window = tk.Toplevel()
-        result_window.title("RESULT PREDICT TABLE")
+        result_window.title(title_windown)
         result_window.state('zoomed')
-
-        Label(result_window,
-            text ="RESULT PREDICT TABLE", font=self.title_font).pack()
+        # Title
+        title_result_table = Label(result_window,
+            text ="RESULT PREDICT TABLE", font=self.title_font)
+        # Frame select
+        frame_select_options = tk.Frame(result_window, borderwidth=2, relief="groove")
         
-        bottom = tk.Frame(result_window,background='#DCDCDC')
+        frame_result_table = tk.Frame(result_window,background='#DCDCDC')
         # ----------- Mở cửa sổ chính giữa màn hình-----------
-
         screen_width = result_window.winfo_screenwidth()
         screen_height = result_window.winfo_screenheight()
         # Coordinates of the upper left corner of the window to make the window appear in the center
         window_width =result_window.winfo_screenwidth() *0.8
-        window_height = result_window.winfo_screenheight()*0.82
+        window_height = result_window.winfo_screenheight()*0.5
         x_cordinate = int((screen_width/2) - (window_width/2))
         y_cordinate = int((screen_height/2) - (window_height/2))
-        
+
         # ----------- Mở cửa sổ chính giữa màn hình-----------
-        bottom.place(x=x_cordinate, y=y_cordinate, width=window_width, height=window_height)
+        frame_select_options.place(x=x_cordinate, y=self.winfo_screenheight()*0.15, width=self.winfo_screenwidth() *
+                          0.45, height=self.winfo_screenheight()*0.17)
+        title_result_table.place(x=self.winfo_screenwidth()*0.4, y=self.winfo_screenheight()*0.36)
+        frame_result_table.place(x=x_cordinate, y=self.winfo_screenheight()*0.4, width=window_width, height=window_height)
         
-        table_result = Table(bottom, dataframe=df_result, showstatusbar=True)
-        table_result.rowselectedcolor = 'none'
-        # ----------- TÔ MÀU cho bảng-----------
-        # Tô cả bảng
+        # -----------------------   
+        demo = pd.DataFrame({
+            'predict_rate': [4,3.9579434,3.7695432,3.5176797],
+            'movie_id': [4,5,2,3],
+            'title': ['Get Shorty (1995)','Copycat (1995)','GoldenEye (1995)','Four Rooms (1995)'],
+            'genres': ['Action|Comedy|Drama','Crime|Drama|Thriller','Action|Adventure|Thriller','Thriller'],
+            'overview': ["Chili Palmer is a Miami mobster who gets sent by his boss, the psychopathic 'Bones' Barboni, to collect a bad debt from Harry Zimm, a Hollywood producer who specializes in cheesy horror films. When Chili meets Harry's leading lady, the romantic sparks fly. After pitching his own life story as a movie idea, Chili learns that being a mobster and being a Hollywood producer really aren't all that different.",
+                        "An agoraphobic psychologist and a female detective must work together to take down a serial killer who copies serial killers from the past.",
+                        "James Bond must unmask the mysterious head of the Janus Syndicate and prevent the leader from utilizing the GoldenEye weapons system to inflict devastating revenge on Britain.",
+                        "It's Ted the Bellhop's first night on the job...and the hotel's very unusual guests are about to place him in some outrageous predicaments. It seems that this evening's room service is serving up one unbelievable happening after another."]
+        })
+        # Label
+        label_option_User = tk.Label(frame_select_options, text="Select user to recommend:", font=("Arial", 15), bd=0)
+        label_option_User.place(x=int(self.winfo_screenwidth()*0.02), y=self.winfo_screenheight()*0.06)
+        # set list chọn user để recomend
+        temp1 = list(range(1, 944))
+        self.option_User = temp1
+        self.list_User = tk.StringVar()
+        self.list_User.set("Select User")
+        # self.list_User.trace('w', self.select_Database)
+        self.option_Menu_Database = tk.OptionMenu(
+            frame_select_options, self.list_User, *self.option_User)
+        self.option_Menu_Database.place(
+            x=int(self.winfo_screenwidth()*0.198), y=self.winfo_screenheight()*0.06,height=30, width=180)
+        
+
+        
+        # Button recommend
+        button_recommend = tk.Button(result_window, text='Recommend...', font=("Arial", 12),
+                                     command=self.demo)
+        button_recommend.configure(bg='#B2EBE0')
+        button_recommend.place(x=self.winfo_screenwidth() *0.6, y=self.winfo_screenheight()*0.15, width=self.winfo_screenheight()*0.17,
+                                      height=self.winfo_screenheight()*0.17)
+
+        # -----------------------
+
+
+        
+        # self.table_result = Table(frame_result_table, dataframe=df_result, showstatusbar=True)
+        self.table_result = Table(frame_result_table, dataframe=demo, showstatusbar=True)
+        self.table_result.rowselectedcolor = 'none'
+
+        # # ----------- TÔ MÀU cho bảng-----------
+        # # Tô cả bảng
         # for i in range(df_result.shape[0]):
-        #     table_result.setRowColors(rows=i, clr='#F26BAA',  cols="all")
-        table_result.setRowColors(rows=range(df_result.shape[0]), clr='#F26BAA', cols='all')
-        index=0
-        for i in mask_color_table:
-            if len(i) == 0:
-                pass
-            else:
-                table_result.setRowColors(rows=index, clr='#B2EBE0',  cols=i)
-            index = index +1
-        table_result.show()
+        #     self.table_result.setRowColors(rows=i, clr='#F26BAA',  cols="all")
+        # self.table_result.setRowColors(rows=range(df_result.shape[0]), clr='#F26BAA', cols='all')
+        # index=0
+        # for i in mask_color_table:
+        #     if len(i) == 0:
+        #         pass
+        #     else:
+        #         self.table_result.setRowColors(rows=index, clr='#B2EBE0',  cols=i)
+        #     index = index +1
+        # self.table_result.show()
+
+    def demo(self):
+        self.table_result.show()
+        self.table_result.autoResizeColumns()
+        self.table_result.redraw()
 
     # sự kiện cho button dự đoán.
     def perdict_System(self):
@@ -224,13 +276,15 @@ class Predicit_Movie(tk.Frame):
             data_to_cal[['user_id','movie_id']] = data_to_cal[['user_id','movie_id']].apply(lambda x: x-1)
             rs = CF(data_to_cal, k=20, uuCF = self.method, bert=1)
             rs.fit()
-            print(self.method)
-            if(self.method ==1):
+            
+            if(self.method == 1):
                 mask_color_table = rs.matrix_to_colortable_u_u()
+                title_windown = "RESULT PREDICT TABLE WITH USER BERT" 
             else:    
                 mask_color_table = rs.matrix_to_colortable_i_i()
+                title_windown = "RESULT PREDICT TABLE WITH ITEM BERT" 
+
             full_rating = rs.full_Y()
             df_result = pd.DataFrame(full_rating)
-            
-            self.result_predict_table(df_result,mask_color_table)
+            self.result_predict_table(df_result,mask_color_table,title_windown)
             return 0
