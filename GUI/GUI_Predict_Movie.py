@@ -10,6 +10,7 @@ from tkinter import font as tkfont
 import tkinter as tk
 # Import the required libraries
 from tkinter import *
+from tkinter import ttk
 from PIL import Image, ImageTk
 
 # ------------------------Import Package CONTROL------------------------
@@ -158,8 +159,8 @@ class Predicit_Movie(tk.Frame):
             data_info = data.iloc[:, [1, 3,4,5]].drop_duplicates().copy()
             
             
-            self.table_rating = Table(self.bottom_Rating, dataframe=data_rating, showstatusbar=True)
-            self.table_info = Table(self.bottom_Info, dataframe=data_info, showstatusbar=True)
+            self.table_rating = Table(self.bottom_Rating, dataframe=data_rating, showstatusbar=True,editable=False)
+            self.table_info = Table(self.bottom_Info, dataframe=data_info, showstatusbar=True,editable=False)
             self.table_rating.show()
             self.table_info.show()
 
@@ -169,14 +170,28 @@ class Predicit_Movie(tk.Frame):
     # sự kiện cho list chọn user
     def select_Method(self, *agrs):
         selected = self.list_Methods.get()
-        print(selected)
         if selected == "user_user_BERT":
             self.method = 1
         else:
             self.method = 0
-    def result_predict_table(self,df_result,mask_color_table,title_windown):
+    def result_predict_table(self):
     	
-        
+        if(self.method == 1):
+            title_windown = "RESULT PREDICT TABLE WITH USER BERT" 
+            option_title = 'Select User'
+            list_to_choose = self.chosen_dataset['user_id'].unique().tolist()
+            text_option = "Select user to recommend:"
+            list_movie = self.chosen_dataset['movie_id'].unique().tolist()
+            self.list_movie_with_content = self.chosen_dataset[self.chosen_dataset['movie_id'].isin(list_movie)]
+            self.list_movie_with_content = self.list_movie_with_content.drop_duplicates(subset='movie_id')
+            self.list_movie_with_content = self.list_movie_with_content.drop(columns=['user_id','rating'])
+            self.list_movie_with_content = self.list_movie_with_content.reset_index().drop(columns=['index'])
+        else:    
+            title_windown = "RESULT PREDICT TABLE WITH ITEM BERT" 
+            option_title = 'Select Movie'
+            text_option = "Select item to recommend:"
+            list_to_choose = self.chosen_dataset['movie_id'].unique().tolist()
+            
         result_window = tk.Toplevel()
         result_window.title(title_windown)
         result_window.state('zoomed')
@@ -205,18 +220,19 @@ class Predicit_Movie(tk.Frame):
         # -----------------------   
         
         # Label
-        label_option_User = tk.Label(frame_select_options, text="Select user to recommend:", font=("Arial", 15), bd=0)
+        label_option_User = tk.Label(frame_select_options, text=text_option, font=("Arial", 15), bd=0)
         label_option_User.place(x=int(self.winfo_screenwidth()*0.02), y=self.winfo_screenheight()*0.06)
         # set list chọn user để recomend
-        temp1 = list(range(1, 944))
+        temp1 = list_to_choose
         self.option_User = temp1
         self.list_User = tk.StringVar()
-        self.list_User.set("Select User")
+        self.list_User.set(option_title)
         # self.list_User.trace('w', self.select_Database)
-        self.option_Menu_Database = tk.OptionMenu(
-            frame_select_options, self.list_User, *self.option_User)
+        self.option_Menu_Database = ttk.Combobox(
+            frame_select_options, state="readonly",textvariable = self.list_User, values=self.option_User)
+        self.option_Menu_Database.bind("<<ComboboxSelected>>", self.select_object)
         self.option_Menu_Database.place(
-            x=int(self.winfo_screenwidth()*0.198), y=self.winfo_screenheight()*0.06,height=30, width=180)
+            x=int(self.winfo_screenwidth()*0.25), y=self.winfo_screenheight()*0.06,height=30, width=180)
         
 
         
@@ -232,7 +248,7 @@ class Predicit_Movie(tk.Frame):
 
         data = pd.DataFrame()
         # self.table_result = Table(self.frame_result_table, dataframe=df_result, showstatusbar=True)
-        self.table_result = Table(self.frame_result_table, dataframe=data, showstatusbar=True)
+        self.table_result = Table(self.frame_result_table, dataframe=data, showstatusbar=True,editable=False)
         self.table_result.show()
         self.table_result.redraw()
         self.table_result.rowselectedcolor = 'none'
@@ -251,20 +267,21 @@ class Predicit_Movie(tk.Frame):
         #     index = index +1
         # self.table_result.show()
 
+    def select_object(self, event):
+        selected = self.list_User.get()
+        # print('select user: ',selected)
+        self.selected_object = selected 
+
     def demo(self):
-        demo = pd.DataFrame({
-            'predict_rate': [4,3.9579434,3.7695432,3.5176797],
-            'movie_id': [4,5,2,3],
-            'title': ['Get Shorty (1995)','Copycat (1995)','GoldenEye (1995)','Four Rooms (1995)'],
-            'genres': ['Action|Comedy|Drama','Crime|Drama|Thriller','Action|Adventure|Thriller','Thriller'],
-            'overview': ["Chili Palmer is a Miami mobster who gets sent by his boss, the psychopathic 'Bones' Barboni, to collect a bad debt from Harry Zimm, a Hollywood producer who specializes in cheesy horror films. When Chili meets Harry's leading lady, the romantic sparks fly. After pitching his own life story as a movie idea, Chili learns that being a mobster and being a Hollywood producer really aren't all that different.",
-                        "An agoraphobic psychologist and a female detective must work together to take down a serial killer who copies serial killers from the past.",
-                        "James Bond must unmask the mysterious head of the Janus Syndicate and prevent the leader from utilizing the GoldenEye weapons system to inflict devastating revenge on Britain.",
-                        "It's Ted the Bellhop's first night on the job...and the hotel's very unusual guests are about to place him in some outrageous predicaments. It seems that this evening's room service is serving up one unbelievable happening after another."]
-        })
-        self.table_result = Table(self.frame_result_table, dataframe=demo, showstatusbar=True)
+        df_recommend = self.rs.recommend(int(self.selected_object)-1)
+        if self.method == 1:
+            df_result = pd.merge(df_recommend,self.list_movie_with_content,on='movie_id').sort_values(by=['predict_rate'],ascending=False)
+        else:
+            df_result = df_recommend.sort_values(by=['predict_rate'], ascending=False)
+        self.table_result = Table(self.frame_result_table, dataframe=df_result, showstatusbar=True, editable=False,)
 
         self.table_result.show()
+        self.table_result.expandColumns(factor = 20)
         self.table_result.autoResizeColumns()
         self.table_result.redraw()
 
@@ -279,17 +296,7 @@ class Predicit_Movie(tk.Frame):
         else:
             data_to_cal =self.chosen_dataset.copy() 
             data_to_cal[['user_id','movie_id']] = data_to_cal[['user_id','movie_id']].apply(lambda x: x-1)
-            rs = CF(data_to_cal, k=20, uuCF = self.method, bert=1)
-            rs.fit()
-            
-            if(self.method == 1):
-                mask_color_table = rs.matrix_to_colortable_u_u()
-                title_windown = "RESULT PREDICT TABLE WITH USER BERT" 
-            else:    
-                mask_color_table = rs.matrix_to_colortable_i_i()
-                title_windown = "RESULT PREDICT TABLE WITH ITEM BERT" 
-
-            full_rating = rs.full_Y()
-            df_result = pd.DataFrame(full_rating)
-            self.result_predict_table(df_result,mask_color_table,title_windown)
+            self.rs = CF(data_to_cal, k=30, uuCF = self.method, bert=1)
+            self.rs.fit()
+            self.result_predict_table()
             return 0

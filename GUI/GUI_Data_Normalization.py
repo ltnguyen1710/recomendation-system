@@ -64,7 +64,7 @@ class Data_Normalization(tk.Frame):
         self.bottom.place(x=self.winfo_screenwidth()*0.18, y=self.winfo_screenheight()*0.05, width=self.winfo_screenwidth() *
                           0.8, height=self.winfo_screenheight()*0.82)
         data = pd.DataFrame()
-        self.table = Table(self.bottom, dataframe=data, showstatusbar=True)
+        self.table = Table(self.bottom, dataframe=data, showstatusbar=True,editable=False)
         self.table.show()
         self.table.redraw()
 

@@ -385,13 +385,20 @@ class CF(object):
         ids = np.where(self.Y_data[:, 0] == u)[0]
         items_rated_by_u = self.Y_data[ids, 1].tolist()
         recommended_items = []
+        ratings = []
         for i in range(self.n_items):
             if i not in items_rated_by_u:
-                rating = self.__pred(u, i)
+                rating = self.__pred(u, i, normalized = 0)
+                if rating > 5:
+                    rating = 5
                 if rating > 0:
-                    recommended_items.append(i)
-
-        return recommended_items
+                    recommended_items.append(i+1)
+                    ratings.append(rating)
+        if self.uuCF:
+            recommend_results = pd.DataFrame({'predict_rate':ratings,'movie_id': recommended_items,})
+        else:
+            recommend_results = pd.DataFrame({'predict_rate':ratings,'user_id': recommended_items,})
+        return recommend_results
 
     def list_rating_label_by_u(self, u):
         ids = np.where(self.Y_data[:, 0] == int(u))[0]
